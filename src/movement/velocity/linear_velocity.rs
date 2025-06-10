@@ -13,6 +13,7 @@ impl Velocity{
     pub fn limit(&mut self, limit: f32){
         let speed = self.0.length();
         if speed > limit{
+            if self.0 == Vec2::ZERO { return;}
             self.0 = self.0.normalize() * limit;
         }
     }
@@ -52,7 +53,7 @@ impl Into<Vec3> for Velocity{
 
 pub fn conservation_of_linear_momentum(
     time: Res<Time>,
-    mut query: Query<(&mut Transform, &Velocity, &LinearSpeedModifier)>,
+    mut query: Query<(&mut Transform, &Velocity, &LinearSpeedModifier)>
 ){
     for (mut transform, &velocity, &speed_mod) in query.iter_mut() {
         let direction_adjusted_speed: Vec3 = velocity.into();

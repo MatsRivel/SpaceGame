@@ -1,5 +1,5 @@
 use bevy::{color::palettes::css::GREEN, prelude::*};
-
+use crate::utillity::forward::ForwardUnit;
 use crate::entities::player::Player;
 
 #[derive(Default, Reflect, GizmoConfigGroup)]
@@ -11,9 +11,8 @@ pub fn draw_arrow(
 ) {
     let transform = query.into_inner();
     let origin = transform.translation;
-    let rot = transform.rotation;
-    let forward = origin + rot * Vec3::Y;
-    let position = origin + forward.normalize() * 25.0;
+    let forward = transform.forward_unit_vector();
+    let position = origin + forward* 25.0;
     gizmos
         .arrow_2d(
             origin.truncate(),

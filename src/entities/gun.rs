@@ -4,7 +4,9 @@ use crate::movement::gravity::gravity_2d::GravityAffected;
 use crate::entities::object::Object;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::velocity::linear_velocity::Velocity;
+use crate::utillity::forward::ForwardUnit;
 use crate::utillity::timing::SelfDestructTimer;
+use crate::BULLET_SPEED_MODIFIER;
 
 #[derive(Component)]
 #[require(BulletFactory)]
@@ -48,7 +50,7 @@ impl Default for BulletFactory{
             radius: 1.0, 
             mass: 1.0,
             lifetime: 6.0,
-            speed: 100.0
+            speed: 25.0
         }
     }
 }
@@ -72,11 +74,11 @@ pub fn fire_bullet(mut commands: Commands, asset_server: Res<AssetServer>, keybo
     for (transform, bullet_factory, optional_velocity) in query{
         let bullet = bullet_factory.make_bullet();
         let origin = transform.translation;
-        let forward = origin + transform.rotation * Vec3::Y;
-        let position = origin + forward.normalize() * 1.0;
+        let forward = transform.forward_unit_vector();
+        let position = origin + forward * 1.0;
         let asset_path = r"sprites\FX\bullet\bullet1.png";
         let image = asset_server.load(asset_path);
-        let bullet_speed = forward.truncate()*bullet_factory.speed;
+        let bullet_speed = forward.truncate();
         let bullet_velocity = match optional_velocity{
            Some(&parent_velocity) => Velocity::new(bullet_speed + *parent_velocity),
            None => Velocity::new(bullet_speed)
@@ -85,7 +87,7 @@ pub fn fire_bullet(mut commands: Commands, asset_server: Res<AssetServer>, keybo
             bullet,
             Transform::from_translation(position).with_rotation(transform.rotation * Quat::from_rotation_z(std::f32::consts::FRAC_PI_2)), // Rotate the image 90 degrees CC.
             bullet_velocity,
-            LinearSpeedModifier::new(bullet_factory.speed),
+            LinearSpeedModifier::new(BULLET_SPEED_MODIFIER),
             Sprite::from_image(image),
             SelfDestructTimer::new(bullet_factory.lifetime)
         ));
