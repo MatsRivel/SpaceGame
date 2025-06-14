@@ -8,8 +8,13 @@ use crate::utillity::forward::ForwardUnit;
 use crate::utillity::timing::SelfDestructTimer;
 use crate::BULLET_SPEED_MODIFIER;
 
-#[derive(Component)]
+
+#[derive(Component, Default)]
 #[require(BulletFactory)]
+pub struct HasGunTag;
+
+#[derive(Component)]
+#[require(BulletFactory, HasGunTag)]
 pub struct Gun{
     pub attack_speed: f32,
     pub magazine_size: u32,

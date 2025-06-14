@@ -1,6 +1,6 @@
-use bevy::{math::f32, prelude::*};
+use bevy::{math::{f32, I8Vec3}, prelude::*};
 use std::ops::{Add, AddAssign, Mul};
-use crate::movement::linear_movement_2d::LinearSpeedModifier;
+use crate::{movement::linear_movement_2d::LinearSpeedModifier, MAXIMUM_LINEAR_STEP_LENGTH};
 
 #[derive(Component, Default, Debug, Clone, Copy)]
 #[require(LinearSpeedModifier)]
@@ -55,8 +55,14 @@ pub fn conservation_of_linear_momentum(
     time: Res<Time>,
     mut query: Query<(&mut Transform, &Velocity, &LinearSpeedModifier)>
 ){
-    for (mut transform, &velocity, &speed_mod) in query.iter_mut() {
-        let direction_adjusted_speed: Vec3 = velocity.into();
-        transform.translation += direction_adjusted_speed * speed_mod * time.delta_secs();
+    for (mut transform, &velocity_2d, &speed_mod) in query.iter_mut() {
+        let adjusted_speed = *speed_mod * time.delta_secs();
+        let velocity_3d: Vec3 = velocity_2d.into();
+        let velocity_adjusted = velocity_3d * adjusted_speed;
+        let limited_velocity = match velocity_adjusted.length() >  MAXIMUM_LINEAR_STEP_LENGTH{
+            true => velocity_adjusted.normalize() * MAXIMUM_LINEAR_STEP_LENGTH,
+            false => velocity_adjusted,
+        };
+        transform.translation += limited_velocity;
     }
 }

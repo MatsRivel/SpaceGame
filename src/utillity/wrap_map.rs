@@ -1,5 +1,6 @@
 use bevy::prelude::*;
-pub fn wrap_position(
+
+pub fn wrap_position_to_window_size(
     windows: Single<&Window>,
     mut transforms: Query<&mut Transform>
 ) {

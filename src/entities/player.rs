@@ -1,4 +1,4 @@
-use crate::entities::gun::Gun;
+use crate::entities::gun::{Gun, HasGunTag};
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::gravity::gravity_2d::GravityAffected;
@@ -10,35 +10,27 @@ use bevy::prelude::*;
 
 #[derive(Component, Default)]
 #[require(Object, GravityAffected, RotationalSpeedModifier, AngularVelocity)]
-pub struct Player;
+pub struct PlayerTag;
 
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>){
     let asset_path = r"sprites\Ships\ship-a\ship-a1.png";
     let image = asset_server.load(asset_path);
     commands.spawn((
-        Player,
+        PlayerTag,
         Sprite::from_image(image),
         LinearSpeedModifier::new(PLAYER_SPEED_MODIFIER),
         RotationalSpeedModifier::new(PLAYER_ROT_SPEED_MODIFIER)
     ));
 }
-
-pub fn spawn_player_with_gun(mut commands: Commands, asset_server: Res<AssetServer>){
-    let asset_path = r"sprites\Ships\ship-a\ship-a1.png";
-    let image = asset_server.load(asset_path);
-    commands.spawn((
-        Player,
-        Sprite::from_image(image),
-        LinearSpeedModifier::new(PLAYER_SPEED_MODIFIER),
-        RotationalSpeedModifier::new(PLAYER_ROT_SPEED_MODIFIER),
-        Gun::new(1.0, 5, 5)
-    ));
+pub fn give_player_gun(mut commands: Commands, query: Single<Entity, (With<PlayerTag>,Without<HasGunTag>)>){
+    let gun = Gun::new(1.0, 5, 5);
+    commands.entity(query.into_inner()).insert(gun);
 }
 
 pub fn accelerate_player(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    query: Single<(&Transform, &mut Velocity), With<Player>>,
+    query: Single<(&Transform, &mut Velocity), With<PlayerTag>>,
 ){
     let (transform, mut velocity) = query.into_inner();
     let left = keyboard_input.pressed(KeyCode::KeyQ);
@@ -67,7 +59,7 @@ pub fn accelerate_player(
 pub fn rotate_player(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    query: Single<(&mut AngularVelocity, &RotationalSpeedModifier), With<Player>>,
+    query: Single<(&mut AngularVelocity, &RotationalSpeedModifier), With<PlayerTag>>,
 ){
     let (mut angular_velocity, rotational_modifier) = query.into_inner();
     let clockwise = keyboard_input.pressed(KeyCode::KeyD);
