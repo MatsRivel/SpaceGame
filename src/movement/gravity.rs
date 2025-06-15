@@ -3,10 +3,10 @@ pub mod gravity_2d{
     use bevy::prelude::*;
 
     use crate::{entities::black_hole::GravityWell, movement::velocity::linear_velocity::Velocity};
-    pub const EVENT_HORIZON: f32 = 5.0;
-    pub const HIGH_GRAVITY: f32 = 100.0;
-    pub const LOW_GRAVITY: f32 = 250.0;
-    pub const NO_GRAVITY: f32 = 500.0;
+    pub const EVENT_HORIZON: f32 = 10.0;
+    pub const HIGH_GRAVITY: f32 = 250.0;
+    pub const LOW_GRAVITY: f32 = 500.0;
+    pub const NO_GRAVITY: f32 = 1000.0;
     #[derive(Component)]
     pub struct Mass{mass:f32}
     
@@ -74,9 +74,9 @@ pub mod gravity_2d{
 
                 let force_multiplier = match dist{
                     ..EVENT_HORIZON => 10.0,
-                    EVENT_HORIZON..HIGH_GRAVITY => 2.0,
-                    HIGH_GRAVITY..LOW_GRAVITY => 1.0,
-                    LOW_GRAVITY..NO_GRAVITY => 0.5,
+                    EVENT_HORIZON..HIGH_GRAVITY => 3.0,
+                    HIGH_GRAVITY..LOW_GRAVITY => 2.0,
+                    LOW_GRAVITY..NO_GRAVITY => 1.0,
                     NO_GRAVITY.. => continue,
                     _ => continue
                 };

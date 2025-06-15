@@ -20,7 +20,7 @@ use crate::movement::velocity::throttle_velocity::{
     throttle_player_velocity};
 #[cfg(debug_assertions)]
 use crate::utillity::gizmos::draw_gravity_falloff;
-use crate::utillity::gizmos::{draw_arrow, to_well, MyArrowGizmos};
+use crate::utillity::gizmos::{draw_arrow, draw_player_trajectory, to_well, MyArrowGizmos};
 use crate::utillity::timing::self_destruct_countdown;
 
 
@@ -58,7 +58,9 @@ pub fn add_gizmos(app: &mut App){
         .add_systems(Update, (
             draw_arrow,
             to_well,
-            draw_gravity_falloff));
+            draw_gravity_falloff,
+            draw_player_trajectory
+        ));
 }
 
 pub fn add_gun(app: &mut App){
