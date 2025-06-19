@@ -22,3 +22,10 @@ impl Mul<LinearSpeedModifier> for Vec2{
         self * *rhs
     }
 }
+impl Mul<LinearSpeedModifier> for Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: LinearSpeedModifier) -> Self::Output {
+        self * *rhs
+    }
+}

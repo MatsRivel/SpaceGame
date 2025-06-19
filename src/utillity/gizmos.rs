@@ -1,9 +1,11 @@
-use bevy::color::palettes::css::{BLUE, DARK_RED, GREEN, INDIAN_RED, ORANGE, RED, WHITE, WHITE_SMOKE, YELLOW};
+use bevy::color::palettes::css::{BLUE, DARK_RED, GREEN, INDIAN_RED, ORANGE, PURPLE, RED, WHITE, WHITE_SMOKE, YELLOW};
 use bevy::prelude::*;
-use crate::movement::gravity::gravity_2d::{GravityProducer, Mass, EVENT_HORIZON, HIGH_GRAVITY, LOW_GRAVITY, NO_GRAVITY};
+use crate::addition_functions::GRAVITY_FUNC;
+use crate::entities::player::PlayerTag;
+use crate::movement::gravity::gravity_2d::{gravity_calculation_flat_true, gravity_calculation_true, GravityProducer, Mass, EVENT_HORIZON_DISTANCE, HIGH_GRAVITY_DISTANCE, LOW_GRAVITY_DISTANCE, NO_GRAVITY_DISTANCE};
+use crate::movement::velocity::linear_acceleration::LinearAcceleration;
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::utillity::forward::ForwardUnit;
-use crate::entities::player::PlayerTag;
 
 #[derive(Default, Reflect, GizmoConfigGroup)]
 pub struct MyArrowGizmos;
@@ -53,70 +55,54 @@ pub fn draw_gravity_falloff(
         gizmos
             .circle_2d(
                 position,
-                EVENT_HORIZON,
+                EVENT_HORIZON_DISTANCE,
                 RED
             );
         gizmos
             .circle_2d(
                 position,
-                HIGH_GRAVITY,
+                HIGH_GRAVITY_DISTANCE,
                 ORANGE
             );
         gizmos
             .circle_2d(
                 position,
-                LOW_GRAVITY,
+                LOW_GRAVITY_DISTANCE,
                 YELLOW
             );
         gizmos
             .circle_2d(
                 position,
-                NO_GRAVITY,
+                NO_GRAVITY_DISTANCE,
                 WHITE
             );
     }
 }
-pub fn draw_player_trajectory(
+pub fn draw_player_trajectory<const N: usize>(
+    time: Res<Time>,
     mut gizmos: Gizmos,
     mut my_gizmos: Gizmos<MyArrowGizmos>,
-    player_query: Single<(&Transform, &Velocity, &Mass), With<PlayerTag>>,
-    gravity_query: Single<(&Transform, &Mass, &GravityProducer), Without<PlayerTag>>){
-    let (player_transform, player_velocity, player_mass) = player_query.into_inner();
-    let player_position = player_transform.translation.truncate().clone();
-    let player_speed = **player_velocity;
-    let (well_position, well_mass, gravity_force) = gravity_query.into_inner();
-    let n = 300;
-    let force = **well_mass * **player_mass * **gravity_force; 
-    let time_step = 0.1;
-    let temp = calculate_trajectory(player_position, player_speed, well_positionforce, time_step );
-    // TODO: Continue drawing future positions
-}
-fn calculate_trajectory(
-    mut position: Vec2,
-    mut velocity: Vec2,
-    gravity_source: Vec2,
-    gm: f32, // G * M
-    dt: f32,
-    steps: usize,
-) -> Vec<Vec2> {
-    let mut points = Vec::with_capacity(steps);
+    gravity_query: Query<(&Transform, &GravityProducer, &Mass)>,
+    player_query: Single<(&Transform, &Mass, &LinearAcceleration), With<PlayerTag>>
+) {
+    // Collect producer data first, so we don't hold the borrow
+    let producers: Vec<(Vec2,f32,f32)> = gravity_query
+        .iter()
+        .map(|(transform, producer, mass)| ((transform.translation.truncate()).clone(), **producer, **mass).clone()).collect();
 
-    for _ in 0..steps {
-        let direction = gravity_source - position;
-        let distance_squared = direction.length_squared();
-
-        // Avoid division by zero or extreme acceleration
-        if distance_squared > 1e-6 {
-            let distance = distance_squared.sqrt();
-            let acceleration = direction.normalize() * (gm / distance_squared);
-
-            // Euler integration step
-            velocity += acceleration * dt;
-            position += velocity * dt;
+    let (player_transform, player_mass,player_acceleration) = player_query.into_inner();
+    let player_pos = player_transform.translation.truncate();
+    let player_mass = **player_mass;
+    let player_acceleration = **player_acceleration;
+    let (mut pos, mass, mut acceleration) = (player_pos, player_mass, player_acceleration);
+    let mut to = pos;
+    for _ in 0..N{
+        for (producer_transform, force, producer_mass) in producers.iter() {
+            let from = to;
+            acceleration += GRAVITY_FUNC(producer_transform, *force, *producer_mass, &pos, mass, time.delta_secs()+1.0);
+            pos += acceleration;
+            to = pos;
+            gizmos.line_2d(from, to, PURPLE);
         }
-
-        points.push(position);
     }
-
-    points
 }

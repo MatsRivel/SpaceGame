@@ -14,8 +14,8 @@ pub fn spawn_gravity_well(mut commands: Commands, asset_server: Res<AssetServer>
         GravityWell,
         GravityProducer::new(GRAVITY_WELL_STRENGTH),
         Sprite::from_image(image.clone()),
-        Transform::from_translation(Vec3::new(-300.0, -300.0, 0.0)),
+        Transform::from_translation(Vec3::new(-5000.0, -3000.0, 0.0)),
         LinearSpeedModifier::new(0.0),
-        Mass::new(100.0)
+        Mass::new(1.0)
     ));
 }

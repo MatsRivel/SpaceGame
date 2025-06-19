@@ -1,4 +1,4 @@
-use bevy::{math::{f32, I8Vec3}, prelude::*};
+use bevy::{math::f32, prelude::*};
 use std::ops::{Add, AddAssign, Mul};
 use crate::{movement::linear_movement_2d::LinearSpeedModifier, MAXIMUM_LINEAR_STEP_LENGTH};
 
@@ -38,13 +38,6 @@ impl Add<Vec2> for Velocity{
     }
 }
 
-impl Mul<LinearSpeedModifier> for Vec3 {
-    type Output = Vec3;
-
-    fn mul(self, rhs: LinearSpeedModifier) -> Self::Output {
-        self * *rhs
-    }
-}
 impl Into<Vec3> for Velocity{
     fn into(self) -> Vec3 {
         self.0.extend(0.0)

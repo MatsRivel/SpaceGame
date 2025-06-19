@@ -1,13 +1,13 @@
 use crate::entities::gun::{Gun, HasGunTag};
+use crate::entities::thrusters::Thrusters;
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::gravity::gravity_2d::GravityAffected;
 use crate::movement::velocity::angular_velocity::AngularVelocity;
-use crate::movement::velocity::linear_velocity::Velocity;
-use crate::{PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
+use crate::movement::velocity::linear_acceleration::LinearAcceleration;
+use crate::{PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER, PLAYER_THRUSTER_STRENGTH};
 use crate::entities::object::Object;
 use bevy::prelude::*;
-
 #[derive(Component, Default)]
 #[require(Object, GravityAffected, RotationalSpeedModifier, AngularVelocity)]
 pub struct PlayerTag;
@@ -15,24 +15,28 @@ pub struct PlayerTag;
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>){
     let asset_path = r"sprites\Ships\ship-a\ship-a1.png";
     let image = asset_server.load(asset_path);
-    commands.spawn((
+    let player_entity = commands.spawn((
         PlayerTag,
         Sprite::from_image(image),
         LinearSpeedModifier::new(PLAYER_SPEED_MODIFIER),
         RotationalSpeedModifier::new(PLAYER_ROT_SPEED_MODIFIER)
-    ));
+    )).id();
+    println!("Player Entity: {player_entity:?}");
 }
 pub fn give_player_gun(mut commands: Commands, query: Single<Entity, (With<PlayerTag>,Without<HasGunTag>)>){
     let gun = Gun::new(1.0, 5, 5);
     commands.entity(query.into_inner()).insert(gun);
 }
-
+pub fn give_player_thrusters(mut commands: Commands, query: Single<Entity, (With<PlayerTag>,Without<Thrusters>)>){
+    let thrusters = Thrusters(PLAYER_THRUSTER_STRENGTH);
+    commands.entity(query.into_inner()).insert(thrusters);
+}
 pub fn accelerate_player(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    query: Single<(&Transform, &mut Velocity), With<PlayerTag>>,
+    query: Single<(&Transform, &mut LinearAcceleration, Option<&Thrusters>), With<PlayerTag>>,
 ){
-    let (transform, mut velocity) = query.into_inner();
+    let (transform, mut acceleration, thruster_option) = query.into_inner();
     let left = keyboard_input.pressed(KeyCode::KeyQ);
     let right = keyboard_input.pressed(KeyCode::KeyE);
     let up = keyboard_input.pressed(KeyCode::KeyW);
@@ -51,9 +55,10 @@ pub fn accelerate_player(
     if momentum == Vec2::ZERO{
         return;
     }
-    let rotation_adjusted_movement = transform.rotation.mul_vec3(momentum.extend(0.0));
-    let delta_time_movement = rotation_adjusted_movement*time.delta_secs();
-    *velocity += delta_time_movement.truncate();
+    let rotation_adjusted_movement = transform.rotation.mul_vec3(momentum.extend(0.0)).truncate();
+    let thrust = **thruster_option.unwrap_or(&Thrusters(1.0));
+    let delta_time_movement = rotation_adjusted_movement*time.delta_secs()*thrust;
+    *acceleration += delta_time_movement;
 }
 
 pub fn rotate_player(
