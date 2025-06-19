@@ -14,7 +14,7 @@ pub fn apply_camera_zoom(
 pub mod following_camera{
     use bevy::prelude::*;
 
-    use crate::entities::player::player::PlayerTag;
+    use crate::entities::player::PlayerTag;
     #[derive(Component)]
     pub struct FollowingCameraTag;
 
