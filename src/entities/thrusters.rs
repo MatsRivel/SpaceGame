@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::movement::velocity::{linear_acceleration::LinearAcceleration, linear_velocity::Velocity};
+use crate::movement::velocity::{linear_acceleration::LinearAcceleration};
 #[derive(Component, Default)]
 #[require(LinearAcceleration)]
 pub struct Thrusters(pub f32);

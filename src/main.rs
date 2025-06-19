@@ -1,11 +1,12 @@
 use bevy::prelude::*;
 
-use crate::{addition_functions::*, entities::asteroid::destory_asteroide};
+use crate::{addition_functions::*, entities::asteroid::destory_asteroide, plugins::{gravity_plugin::GravityPlugin, gun_plugin::GunPlugin}};
 mod movement;
 mod entities;
 mod utillity;
 mod addition_functions;
 mod camera;
+mod plugins;
 const PLAYER_THRUSTER_STRENGTH: f32 = 50.0f32;
 const PLAYER_SPEED_MODIFIER: f32 = 2.0f32;
 const PLAYER_ROT_SPEED_MODIFIER: f32 = 1.0f32;
@@ -35,15 +36,17 @@ fn main() {
         // }),
         ..default()
     }));
-    
+    app.add_plugins((
+        GunPlugin,
+        GravityPlugin,
+        
+    ));
     app.insert_resource(ClearColor(SKY_COLOR));
     app.insert_resource(Time::<Fixed>::from_hz(30.0)) ;//This messe s with time.
     
     add_camera(&mut app);
     add_player(&mut app);
     add_movement(&mut app);
-    add_gravity(&mut app);
-    add_gun(&mut app);
     add_asteroid(&mut app);
     add_gravity_well(&mut app);
     add_player_thrusters(&mut app);

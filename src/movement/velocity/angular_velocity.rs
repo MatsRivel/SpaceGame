@@ -25,7 +25,7 @@ impl AddAssign<f32> for AngularVelocity{
         self.0 += rhs;
     }
 }
-pub fn conservation_of_angular_momentum(
+pub fn apply_angular_velocity_to_position(
     time: Res<Time>,
     mut query: Query<(&mut Transform, &AngularVelocity,  &RotationalSpeedModifier)>,
 ){

@@ -5,8 +5,9 @@ use crate::entities::gravity_well::spawn_gravity_well;
 use crate::entities::gun::fire_bullet;
 use crate::entities::player::{accelerate_player, give_player_gun, give_player_thrusters, rotate_player, spawn_player, PlayerTag};
 use crate::movement::gravity::gravity_2d::{build_gravity_function, crush_when_inside_event_horizon, event_horizon_entry_event, gravity_calculation_flat_saviour, gravity_calculation_flat_true, gravity_calculation_true, EnteredEventHorizon};
-use crate::movement::velocity::angular_velocity::conservation_of_angular_momentum;
-use crate::movement::velocity::linear_velocity::conservation_of_linear_momentum;
+use crate::movement::velocity::angular_velocity::apply_angular_velocity_to_position;
+use crate::movement::velocity::linear_acceleration::apply_linear_acceleration;
+use crate::movement::velocity::linear_velocity::apply_linear_velocity_to_position;
 use crate::entities::asteroid::{
         initialize_asteroide_veloccity, spawn_asteroides
     };
@@ -26,18 +27,7 @@ pub fn add_camera(app: &mut App){
         apply_camera_zoom.after(spawn_camera)
     )).add_systems(Update, move_following_camera);
 }
-pub const GRAVITY_FUNC: fn(&Vec2, f32, f32, &Vec2, f32, f32) -> Vec2 = gravity_calculation_flat_true;
 
-pub fn add_gravity(app: &mut App){
-    app.add_event::<EnteredEventHorizon>()
-    .add_systems(FixedPreUpdate, build_gravity_function(GRAVITY_FUNC))
-    .add_systems(Update,
-        (
-            event_horizon_entry_event,
-            crush_when_inside_event_horizon
-        ))
-        .add_systems(FixedPostUpdate, build_gravity_function(GRAVITY_FUNC));
-}
 pub fn add_gizmos(app: &mut App){
     app.init_gizmo_group::<MyArrowGizmos>()
         .add_systems(Update, (
@@ -47,18 +37,11 @@ pub fn add_gizmos(app: &mut App){
             draw_player_trajectory::<TRAJECTORY_LENGTH>
         ));
 }
-pub fn add_gun(app: &mut App){
-        app.add_systems(Startup, 
-            give_player_gun.after(spawn_player)
-        ).add_systems(Update, (
-            throttle_bullet_velocity,
-            fire_bullet, 
-            self_destruct_countdown));
-}
 pub fn add_movement(app: &mut App){
         app.add_systems(FixedUpdate, (
-            conservation_of_linear_momentum, 
-            conservation_of_angular_momentum));
+            apply_linear_velocity_to_position, 
+            apply_angular_velocity_to_position
+        )).add_systems(Update, apply_linear_acceleration);
 }
 pub fn add_player(app: &mut App){
         app.add_systems(Startup, 

@@ -1,10 +1,10 @@
 use bevy::color::palettes::css::{BLUE, DARK_RED, GREEN, INDIAN_RED, ORANGE, PURPLE, RED, WHITE, WHITE_SMOKE, YELLOW};
 use bevy::prelude::*;
-use crate::addition_functions::GRAVITY_FUNC;
 use crate::entities::player::PlayerTag;
 use crate::movement::gravity::gravity_2d::{gravity_calculation_flat_true, gravity_calculation_true, GravityProducer, Mass, EVENT_HORIZON_DISTANCE, HIGH_GRAVITY_DISTANCE, LOW_GRAVITY_DISTANCE, NO_GRAVITY_DISTANCE};
 use crate::movement::velocity::linear_acceleration::LinearAcceleration;
 use crate::movement::velocity::linear_velocity::Velocity;
+use crate::plugins::gravity_plugin::GRAVITY_FUNC;
 use crate::utillity::forward::ForwardUnit;
 
 #[derive(Default, Reflect, GizmoConfigGroup)]
@@ -83,24 +83,24 @@ pub fn draw_player_trajectory<const N: usize>(
     mut gizmos: Gizmos,
     mut my_gizmos: Gizmos<MyArrowGizmos>,
     gravity_query: Query<(&Transform, &GravityProducer, &Mass)>,
-    player_query: Single<(&Transform, &Mass, &LinearAcceleration), With<PlayerTag>>
+    player_query: Single<(&Transform, &Mass, &Velocity), With<PlayerTag>>
 ) {
     // Collect producer data first, so we don't hold the borrow
     let producers: Vec<(Vec2,f32,f32)> = gravity_query
         .iter()
         .map(|(transform, producer, mass)| ((transform.translation.truncate()).clone(), **producer, **mass).clone()).collect();
 
-    let (player_transform, player_mass,player_acceleration) = player_query.into_inner();
+    let (player_transform, player_mass,player_velocity) = player_query.into_inner();
     let player_pos = player_transform.translation.truncate();
     let player_mass = **player_mass;
-    let player_acceleration = **player_acceleration;
-    let (mut pos, mass, mut acceleration) = (player_pos, player_mass, player_acceleration);
+    let player_velocity = **player_velocity;
+    let (mut pos, mass, mut velocity) = (player_pos, player_mass, player_velocity);
     let mut to = pos;
     for _ in 0..N{
         for (producer_transform, force, producer_mass) in producers.iter() {
             let from = to;
-            acceleration += GRAVITY_FUNC(producer_transform, *force, *producer_mass, &pos, mass, time.delta_secs()+1.0);
-            pos += acceleration;
+            velocity += GRAVITY_FUNC(producer_transform, *force, *producer_mass, &pos, mass, time.delta_secs()+1.0);
+            pos += velocity;
             to = pos;
             gizmos.line_2d(from, to, PURPLE);
         }

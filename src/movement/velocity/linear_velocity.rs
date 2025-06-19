@@ -1,5 +1,5 @@
 use bevy::{math::f32, prelude::*};
-use std::ops::{Add, AddAssign, Mul};
+use std::ops::{Add, AddAssign};
 use crate::{movement::linear_movement_2d::LinearSpeedModifier, MAXIMUM_LINEAR_STEP_LENGTH};
 
 #[derive(Component, Default, Debug, Clone, Copy)]
@@ -16,6 +16,9 @@ impl Velocity{
             if self.0 == Vec2::ZERO { return;}
             self.0 = self.0.normalize() * limit;
         }
+    }
+    pub fn add(&mut self, value: Vec2){
+        self.0 += value;
     }
 }
 impl std::ops::Deref for Velocity {
@@ -44,12 +47,10 @@ impl Into<Vec3> for Velocity{
     }
 }
 
-pub fn conservation_of_linear_momentum(
-    time: Res<Time>,
-    mut query: Query<(&mut Transform, &Velocity, &LinearSpeedModifier)>
+pub fn apply_linear_velocity_to_position(mut query: Query<(&mut Transform, &Velocity, &LinearSpeedModifier)>
 ){
     for (mut transform, &velocity_2d, &speed_mod) in query.iter_mut() {
-        let adjusted_speed = *speed_mod * time.delta_secs();
+        let adjusted_speed = *speed_mod;// * time.delta_secs();
         let velocity_3d: Vec3 = velocity_2d.into();
         let velocity_adjusted = velocity_3d * adjusted_speed;
         let limited_velocity = match velocity_adjusted.length() >  MAXIMUM_LINEAR_STEP_LENGTH{
