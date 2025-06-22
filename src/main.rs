@@ -1,13 +1,13 @@
 use bevy::prelude::*;
 
-use crate::{addition_functions::*, entities::asteroid::destory_asteroide, plugins::{gravity_plugin::GravityPlugin, gun_plugin::GunPlugin}};
+use crate::{addition_functions::*, entities::asteroid::destory_asteroide, plugins::{gravity_plugin::GravityPlugin, gun_plugin::GunPlugin, thrusters_plugin::ThrusterPlugin}};
 mod movement;
 mod entities;
 mod utillity;
 mod addition_functions;
 mod camera;
 mod plugins;
-const PLAYER_THRUSTER_STRENGTH: f32 = 50.0f32;
+const PLAYER_THRUSTER_STRENGTH: f32 = 100.0f32;
 const PLAYER_SPEED_MODIFIER: f32 = 2.0f32;
 const PLAYER_ROT_SPEED_MODIFIER: f32 = 1.0f32;
 const ASTEROID_SPEED_MODIFIER: f32 = 25.0f32;
@@ -23,6 +23,8 @@ const MAXIMUM_LINEAR_BULLET_SPEED: f32 = SPEED_OF_LIGHT;
 const MAXIMUM_LINEAR_STEP_LENGTH: f32 = 50.0f32;
 
 const TRAJECTORY_LENGTH: usize = 100;
+const PLAYER_BULLET_IMAGE_PATH: &str = r"sprites\FX\bullet\bullet1.png";
+
 fn main() {
     unsafe {
         std::env::set_var("WGPU_BACKEND", "vk");
@@ -39,6 +41,7 @@ fn main() {
     app.add_plugins((
         GunPlugin,
         GravityPlugin,
+        ThrusterPlugin
         
     ));
     app.insert_resource(ClearColor(SKY_COLOR));
@@ -49,7 +52,7 @@ fn main() {
     add_movement(&mut app);
     add_asteroid(&mut app);
     add_gravity_well(&mut app);
-    add_player_thrusters(&mut app);
+    // add_player_thrusters(&mut app);
     #[cfg(debug_assertions)]
     add_gizmos(&mut app);
     app.add_observer(destory_asteroide);

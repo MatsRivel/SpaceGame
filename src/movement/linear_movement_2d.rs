@@ -1,10 +1,15 @@
 use bevy::prelude::*;
 use std::ops::Mul;
-#[derive(Component,Default, Clone, Copy)]
+#[derive(Component,Clone, Copy)]
 pub struct LinearSpeedModifier(f32);
 impl LinearSpeedModifier{
     pub fn new(speed: f32)->Self{
         Self(speed)
+    }
+}
+impl Default for LinearSpeedModifier{
+    fn default() -> Self {
+        Self(1.0)
     }
 }
 impl std::ops::Deref for LinearSpeedModifier {

@@ -3,7 +3,7 @@ use crate::camera::following_camera::{make_camera_follow, move_following_camera}
 use crate::camera::{apply_camera_zoom, spawn_camera};
 use crate::entities::gravity_well::spawn_gravity_well;
 use crate::entities::gun::fire_bullet;
-use crate::entities::player::{accelerate_player, give_player_gun, give_player_thrusters, rotate_player, spawn_player, PlayerTag};
+use crate::entities::player::{accelerate_player, give_player_gun, rotate_player, spawn_player, PlayerTag};
 use crate::movement::gravity::gravity_2d::{build_gravity_function, crush_when_inside_event_horizon, event_horizon_entry_event, gravity_calculation_flat_saviour, gravity_calculation_flat_true, gravity_calculation_true, EnteredEventHorizon};
 use crate::movement::velocity::angular_velocity::apply_angular_velocity_to_position;
 use crate::movement::velocity::linear_acceleration::apply_linear_acceleration;
@@ -52,10 +52,7 @@ pub fn add_player(app: &mut App){
             throttle_player_velocity
         ));
 }
-pub fn add_player_thrusters( app: &mut App){
-        app.add_systems(Startup, 
-            give_player_thrusters.after(spawn_player));
-}
+
 pub fn add_asteroid(app: &mut App){
     app.add_systems(Startup,(
             spawn_asteroides,

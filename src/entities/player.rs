@@ -1,11 +1,11 @@
 use crate::entities::gun::{Gun, HasGunTag};
-use crate::entities::thrusters::Thrusters;
+use crate::entities::thrusters::{HasThrusters, Thrusters};
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::gravity::gravity_2d::GravityAffected;
 use crate::movement::velocity::angular_velocity::AngularVelocity;
 use crate::movement::velocity::linear_acceleration::LinearAcceleration;
-use crate::{PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER, PLAYER_THRUSTER_STRENGTH};
+use crate::{PLAYER_BULLET_IMAGE_PATH, PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
 use crate::entities::object::Object;
 use bevy::prelude::*;
 #[derive(Component, Default)]
@@ -13,30 +13,44 @@ use bevy::prelude::*;
 pub struct PlayerTag;
 
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>){
-    let asset_path = r"sprites\Ships\ship-a\ship-a1.png";
+    // let asset_path = r"sprites\Ships\ship-a\ship-a1.png";
+    let asset_path = r"AI_Assets\Body\Space_sattelite_core...-1670999352-0 (1).png";
     let image = asset_server.load(asset_path);
+    let mut sprite =     Sprite::from_image(image);
+    sprite.custom_size = Some(Vec2::splat(128.0));
     let player_entity = commands.spawn((
         PlayerTag,
-        Sprite::from_image(image),
+        sprite,
         LinearSpeedModifier::new(PLAYER_SPEED_MODIFIER),
-        RotationalSpeedModifier::new(PLAYER_ROT_SPEED_MODIFIER)
+        RotationalSpeedModifier::new(PLAYER_ROT_SPEED_MODIFIER),
     )).id();
     println!("Player Entity: {player_entity:?}");
 }
-pub fn give_player_gun(mut commands: Commands, query: Single<Entity, (With<PlayerTag>,Without<HasGunTag>)>){
-    let gun = Gun::new(1.0, 5, 5);
-    commands.entity(query.into_inner()).insert(gun);
+
+pub fn give_player_gun(mut commands: Commands, asset_server: Res<AssetServer>, query: Single<Entity, (With<PlayerTag>,Without<HasGunTag>)>){
+    let gun = Gun::new(1.0, 5, 5, Some(asset_server.load(PLAYER_BULLET_IMAGE_PATH)));
+    commands.entity(query.into_inner()).insert(HasGunTag).with_child(gun);
 }
-pub fn give_player_thrusters(mut commands: Commands, query: Single<Entity, (With<PlayerTag>,Without<Thrusters>)>){
-    let thrusters = Thrusters(PLAYER_THRUSTER_STRENGTH);
-    commands.entity(query.into_inner()).insert(thrusters);
+
+fn get_thrust(possible_children: Option<&Children>, possible_thrusters: Option<&HasThrusters>, thruster_query: Query<&Thrusters>)->f32{
+    if possible_thrusters.is_some() && let Some(children) = possible_children{
+        return children
+            .iter()
+            .filter_map(|child| thruster_query.get(child).ok())
+            .map(|thruster| **thruster)
+            .sum();
+    }else{
+        return 1.0;
+    }
 }
 pub fn accelerate_player(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    query: Single<(&Transform, &mut LinearAcceleration, Option<&Thrusters>), With<PlayerTag>>,
+    player_query: Single<(&Transform, &mut LinearAcceleration, Option<&Children>, Option<&HasThrusters>), With<PlayerTag>>,
+    thruster_query: Query<&Thrusters>
 ){
-    let (transform, mut acceleration, thruster_option) = query.into_inner();
+    let (transform, mut acceleration, possible_children, possible_thrusters) = player_query.into_inner();
+    let thrust = get_thrust(possible_children, possible_thrusters, thruster_query);
     let left = keyboard_input.pressed(KeyCode::KeyQ);
     let right = keyboard_input.pressed(KeyCode::KeyE);
     let up = keyboard_input.pressed(KeyCode::KeyW);
@@ -56,7 +70,6 @@ pub fn accelerate_player(
         return;
     }
     let rotation_adjusted_movement = transform.rotation.mul_vec3(momentum.extend(0.0)).truncate();
-    let thrust = **thruster_option.unwrap_or(&Thrusters(1.0));
     let delta_time_movement = rotation_adjusted_movement*time.delta_secs()*thrust;
     *acceleration += delta_time_movement;
 }
