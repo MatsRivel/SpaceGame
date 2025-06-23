@@ -2,9 +2,8 @@ use bevy::prelude::*;
 use crate::camera::following_camera::{make_camera_follow, move_following_camera};
 use crate::camera::{apply_camera_zoom, spawn_camera};
 use crate::entities::gravity_well::spawn_gravity_well;
-use crate::entities::gun::fire_bullet;
-use crate::entities::player::{accelerate_player, give_player_gun, rotate_player, spawn_player, PlayerTag};
-use crate::movement::gravity::gravity_2d::{build_gravity_function, crush_when_inside_event_horizon, event_horizon_entry_event, gravity_calculation_flat_saviour, gravity_calculation_flat_true, gravity_calculation_true, EnteredEventHorizon};
+
+use crate::entities::player::{accelerate_player,  rotate_player, spawn_player, PlayerTag};
 use crate::movement::velocity::angular_velocity::apply_angular_velocity_to_position;
 use crate::movement::velocity::linear_acceleration::apply_linear_acceleration;
 use crate::movement::velocity::linear_velocity::apply_linear_velocity_to_position;
@@ -13,9 +12,8 @@ use crate::entities::asteroid::{
     };
 use crate::movement::velocity::throttle_velocity::{
     throttle_asteroid_velocity, 
-    throttle_bullet_velocity, 
     throttle_player_velocity};
-use crate::utillity::timing::self_destruct_countdown;
+    
 #[cfg(debug_assertions)]
 use crate::utillity::gizmos::{draw_gravity_falloff,draw_arrow, draw_player_trajectory, to_well, MyArrowGizmos};
 use crate::TRAJECTORY_LENGTH;

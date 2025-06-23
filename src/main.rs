@@ -24,7 +24,8 @@ const MAXIMUM_LINEAR_STEP_LENGTH: f32 = 50.0f32;
 
 const TRAJECTORY_LENGTH: usize = 100;
 const PLAYER_BULLET_IMAGE_PATH: &str = r"sprites\FX\bullet\bullet1.png";
-
+const PLAYER_BODY_IMAGE_PATH: &str = r"AI_Assets\Body\Space_sattelite_core...-1670999352-0 (1).png";
+const PLAYER_GUN_IMAGE_PATH: &str = r"AI_Assets\Weapon\Space_station_weapon...-1138415846-0 (3).png";
 fn main() {
     unsafe {
         std::env::set_var("WGPU_BACKEND", "vk");
