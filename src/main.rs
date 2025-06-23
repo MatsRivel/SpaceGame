@@ -7,7 +7,7 @@ mod utillity;
 mod addition_functions;
 mod camera;
 mod plugins;
-const PLAYER_THRUSTER_STRENGTH: f32 = 100.0f32;
+const PLAYER_THRUSTER_STRENGTH: f32 = 200.0f32;
 const PLAYER_SPEED_MODIFIER: f32 = 2.0f32;
 const PLAYER_ROT_SPEED_MODIFIER: f32 = 1.0f32;
 const ASTEROID_SPEED_MODIFIER: f32 = 25.0f32;
