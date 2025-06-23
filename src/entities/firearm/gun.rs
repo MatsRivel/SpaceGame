@@ -4,6 +4,7 @@ use crate::entities::firearm::bullet::{Bullet,MakeBullet};
 use crate::entities::object::Object;
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::utillity::timing::SelfDestructTimer;
+use crate::{PLAYER_BULLET_IMAGE_PATH, PLAYER_GUN_IMAGE_PATH};
 
 pub trait BulletMakerRequirements: MakeBullet +Default +Clone +Send +Sync +'static +From::<Option<Handle<Image>>>{}
 
@@ -65,5 +66,23 @@ pub fn fire_bullet<PlayerIdentification:Component, BulletCreator:BulletMakerRequ
                 commands.spawn(bullet_bundle);
             }
         }
+    }
+}
+
+pub fn give_player_gun<PlayerIdentification: Component, BulletMaker: BulletMakerRequirements>(mut commands: Commands, asset_server: Res<AssetServer>, query: Single<Entity, (With<PlayerIdentification>,Without<HasGunTag>)>){
+    let gun = Gun::<BulletMaker>::new(1.0, 5, 5, Some(asset_server.load(PLAYER_BULLET_IMAGE_PATH)));
+    let image = asset_server.load(PLAYER_GUN_IMAGE_PATH);
+    let entity = query.into_inner();
+    let mut sprite = Sprite::from_image(image);
+    sprite.custom_size = Some(Vec2::splat(64.0));
+    let translation = Vec3::X*50.0;
+    let translations = [translation,-1.0*translation];
+    for translation in translations{
+        let gun_bundle = (
+            gun.clone(),
+            Transform::from_translation(translation),
+            sprite.clone(),
+        );
+        commands.entity(entity).insert(HasGunTag).with_child(gun_bundle);
     }
 }

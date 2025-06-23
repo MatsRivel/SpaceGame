@@ -1,12 +1,15 @@
 use bevy::prelude::*;
 
-use crate::{addition_functions::*, entities::asteroid::destory_asteroide, plugins::{gravity_plugin::GravityPlugin, gun_plugin::GunPlugin, thrusters_plugin::ThrusterPlugin}};
+use crate::{addition_functions::*, entities::asteroid::other_destory_asteroide, plugins::{gravity_plugin::GravityPlugin, gun_plugin::GunPlugin, thrusters_plugin::ThrusterPlugin, world_wrap_plugin::WorldWrapPlugin}};
 mod movement;
 mod entities;
 mod utillity;
 mod addition_functions;
 mod camera;
 mod plugins;
+const WORLD_HEIGHT: f32 = 20_000.0f32;
+const WORLD_WIDTH: f32 = 20_000.0f32;
+
 const PLAYER_THRUSTER_STRENGTH: f32 = 200.0f32;
 const PLAYER_SPEED_MODIFIER: f32 = 2.0f32;
 const PLAYER_ROT_SPEED_MODIFIER: f32 = 1.0f32;
@@ -42,8 +45,8 @@ fn main() {
     app.add_plugins((
         GunPlugin,
         GravityPlugin,
-        ThrusterPlugin
-        
+        ThrusterPlugin,
+        WorldWrapPlugin
     ));
     app.insert_resource(ClearColor(SKY_COLOR));
     app.insert_resource(Time::<Fixed>::from_hz(30.0)) ;//This messe s with time.
@@ -56,7 +59,7 @@ fn main() {
     // add_player_thrusters(&mut app);
     #[cfg(debug_assertions)]
     add_gizmos(&mut app);
-    app.add_observer(destory_asteroide);
+    app.add_observer(other_destory_asteroide);
 
     app.run();
 }

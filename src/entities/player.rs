@@ -30,24 +30,7 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>){
     println!("Player Entity: {player_entity:?}");
 }
 
-pub fn give_player_gun<PlayerIdentification: Component, BulletMaker: BulletMakerRequirements>(mut commands: Commands, asset_server: Res<AssetServer>, query: Single<Entity, (With<PlayerIdentification>,Without<HasGunTag>)>){
-    let gun = Gun::<BulletMaker>::new(1.0, 5, 5, Some(asset_server.load(PLAYER_BULLET_IMAGE_PATH)));
-    let image = asset_server.load(PLAYER_GUN_IMAGE_PATH);
-    let entity = query.into_inner();
-    let mut sprite = Sprite::from_image(image);
-    sprite.custom_size = Some(Vec2::splat(64.0));
-    let translation = Vec3::X*50.0;
-    let rotation = Quat::from_rotation_z(GUN_IMAGE_ROTATION_ADJUSTION);
-    let translations = [translation,-1.0*translation];
-    for translation in translations{
-        let gun_bundle = (
-            gun.clone(),
-            Transform::from_translation(translation).with_rotation(rotation),
-            sprite.clone(),
-        );
-        commands.entity(entity).insert(HasGunTag).with_child(gun_bundle);
-    }
-}
+
 
 fn get_thrust(possible_children: Option<&Children>, possible_thrusters: Option<&HasThrusters>, thruster_query: Query<&Thrusters>)->f32{
     if possible_thrusters.is_some() && let Some(children) = possible_children{
