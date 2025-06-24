@@ -11,5 +11,4 @@ impl Plugin for GunPlugin{
             fire_bullet::<PlayerTag, BulletFactory>, 
             self_destruct_countdown));
     }
-
 }

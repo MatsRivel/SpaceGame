@@ -42,7 +42,6 @@ impl <T: BulletMakerRequirements>Default for Gun<T>{
     }
 }
 
-
 pub fn fire_bullet<PlayerIdentification:Component, BulletCreator:BulletMakerRequirements>(
     mut commands: Commands, 
     keyboard_input: Res<ButtonInput<KeyCode>>, 

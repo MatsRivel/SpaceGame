@@ -1,22 +1,5 @@
 use bevy::prelude::*;
 
-use crate::{entities::{firearm::gun::BulletMakerRequirements, object::Object}, movement::{gravity::gravity_2d::GravityAffected, velocity::linear_velocity::Velocity}, utillity::timing::SelfDestructTimer, BULLET_SPEED_MODIFIER};
-
-
-#[derive(Component)]
-#[require(Object, GravityAffected, SelfDestructTimer)]
-pub struct Bullet{
-    pub damage: f32,
-    pub radius: f32,
-    pub mass: f32,
-}
-impl Bullet{
-    pub fn new(damage: f32,radius: f32,mass: f32) -> Self{
-        Self { damage, radius, mass}
-    }
-}
-
-
 #[derive(Clone)]
 pub struct BulletFactory{
     pub damage: f32,
@@ -66,8 +49,4 @@ impl Default for BulletFactory{
             bullet_image: None
         }
     }
-}
-
-pub trait MakeBullet{
-    fn make_bullet_bundle(&self, possible_velocity: Option<&Velocity>, parent_position: &Vec2, adjusted_rotation: &Quat)->(Bullet, Velocity, bevy::prelude::Transform, bevy::prelude::Sprite, SelfDestructTimer);
 }
