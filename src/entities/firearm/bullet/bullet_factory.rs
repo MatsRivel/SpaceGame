@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::{utillity::timing::SelfDestructTimer, BULLET_SPEED_MODIFIER};
+
 #[derive(Clone)]
 pub struct BulletFactory{
     pub damage: f32,

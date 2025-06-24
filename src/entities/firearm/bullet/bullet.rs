@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::{movement::gravity::gravity_2d::GravityAffected, utillity::timing::SelfDestructTimer};
+
 #[derive(Component)]
 #[require(Object, GravityAffected, SelfDestructTimer)]
 pub struct Bullet{
