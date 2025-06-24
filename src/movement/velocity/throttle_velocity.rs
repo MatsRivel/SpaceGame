@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use crate::entities::asteroid::Asteroid;
-use crate::entities::firearm::bullet::Bullet;
+use crate::entities::firearm::bullet::bullet::Bullet;
 use crate::entities::player::PlayerTag;
 use crate::movement::{velocity::linear_velocity::Velocity};
 

@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use rand::Rng;
+use crate::entities::firearm::bullet::bullet::Bullet;
 use crate::movement::gravity::gravity_2d::Mass;
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::movement::{gravity::gravity_2d::GravityAffected};
@@ -65,7 +66,7 @@ pub fn check_asteroid_bullet_collisions(
 
             if distance < destruction_distance {
                 // Trigger the observer system to call the destroy_asteroid function
-                commands.trigger(DestroyAsteroid, asteroid_entity);
+                commands.trigger(DestroyAsteroid);
                 break; // avoid duplicate triggers
             }
         }
