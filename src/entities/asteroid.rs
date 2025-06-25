@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use rand::Rng;
-use crate::bullet::Bullet;
+use crate::destruction::{destroy_asteroid, destroy_destructible, Destructible};
 use crate::gravity::gravity_2d::{GravityAffected, Mass};
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
@@ -28,8 +28,7 @@ pub fn spawn_asteroides(mut commands: Commands, asset_server: Res<AssetServer>){
         ));
     }
 }
-#[derive(Component,Debug,Clone,Copy)]
-pub struct Destructible;
+
 
 pub fn spawn_friendly_asteroide(mut commands: Commands, asset_server: Res<AssetServer>){
     let asset_path = r"sprites\Asteroids\big-a.png";
@@ -40,50 +39,16 @@ pub fn spawn_friendly_asteroide(mut commands: Commands, asset_server: Res<AssetS
     let entity = commands.spawn((
         Asteroid,
         sprite.clone(),
-        Transform::from_translation(Vec3::new(300.0, 0.0, 0.0)),
+        Transform::from_translation(Vec3::new(0.0, 300.0, 0.0)),
         LinearSpeedModifier::new(0.0),
         Mass::new(1.0),
         Destructible
     )).id();
-    // Create a global observer watching this entity
+    // Create a global observer watching this entity. Triggers only for this entity.
     let mut observer = Observer::new(destroy_asteroid);
     observer.watch_entity(entity);
     commands.spawn(observer); // <- THIS is what hooks it all up
 }
-
-pub fn check_asteroid_bullet_collisions(
-    mut commands: Commands,
-    asteroid_query: Query<(Entity, &Transform), With<Destructible>>,
-    bullet_query: Query<&Transform, With<Bullet>>,
-) {
-    let destruction_distance = 50.0;
-
-    for (asteroid_entity, asteroid_transform) in asteroid_query.iter() {
-        for bullet_transform in bullet_query.iter() {
-            let distance = asteroid_transform
-                .translation
-                .truncate()
-                .distance(bullet_transform.translation.truncate());
-
-            if distance < destruction_distance {
-                // Trigger the observer system to call the destroy_asteroid function
-                commands.trigger_targets(DestroyAsteroid,asteroid_entity);
-                break; // avoid duplicate triggers
-            }
-        }
-    }
-}
-
-#[derive(Event)]
-pub struct DestroyAsteroid;
-pub fn destroy_asteroid(trigger: Trigger<DestroyAsteroid>, mut commands: Commands) {
-    dbg!("Asteroid was destroyed!");
-    let id = trigger.target();
-    if let Ok(mut entity) = commands.get_entity(id) {
-        entity.despawn();
-    }
-}
-
 
 
 pub fn initialize_asteroide_veloccity(mut query: Query<(&mut Velocity, &LinearSpeedModifier), With<Asteroid>>){
