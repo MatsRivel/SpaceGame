@@ -1,12 +1,11 @@
 use std::f32::consts::PI;
 
-use crate::entities::firearm::gun::{self, BulletMakerRequirements, Gun, HasGunTag};
-use crate::entities::thrusters::{HasThrusters, Thrusters};
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::gravity::gravity_2d::GravityAffected;
 use crate::movement::velocity::angular_velocity::AngularVelocity;
 use crate::movement::velocity::linear_acceleration::LinearAcceleration;
+use crate::thrusters::thrusters::{HasThrusters, Thrusters};
 use crate::{PLAYER_BODY_IMAGE_PATH, PLAYER_BULLET_IMAGE_PATH, PLAYER_GUN_IMAGE_PATH, PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
 use crate::entities::object::Object;
 use bevy::prelude::*;

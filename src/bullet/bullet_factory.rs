@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
-use crate::{utillity::timing::SelfDestructTimer, BULLET_SPEED_MODIFIER};
+use crate::{bullet::{bullet::Bullet, bullet_maker_trait::MakeBullet}, gun::gun::BulletMakerRequirements, movement::velocity::linear_velocity::Velocity, utillity::timing::SelfDestructTimer, BULLET_SPEED_MODIFIER};
+
 
 #[derive(Clone)]
 pub struct BulletFactory{

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{movement::gravity::gravity_2d::GravityAffected, utillity::timing::SelfDestructTimer};
+use crate::{entities::object::Object, movement::gravity::gravity_2d::GravityAffected, utillity::timing::SelfDestructTimer};
 
 #[derive(Component)]
 #[require(Object, GravityAffected, SelfDestructTimer)]

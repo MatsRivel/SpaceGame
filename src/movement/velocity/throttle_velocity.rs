@@ -1,9 +1,8 @@
 use bevy::prelude::*;
+use crate::bullet::bullet::Bullet;
 use crate::entities::asteroid::Asteroid;
-use crate::entities::firearm::bullet::bullet::Bullet;
 use crate::entities::player::PlayerTag;
 use crate::movement::{velocity::linear_velocity::Velocity};
-
 use crate::MAXIMUM_LINEAR_PLAYER_SPEED;
 use crate::MAXIMUM_LINEAR_ASTEROID_SPEED;
 use crate::MAXIMUM_LINEAR_BULLET_SPEED;

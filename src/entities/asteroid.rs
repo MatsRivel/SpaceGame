@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use rand::Rng;
-use crate::entities::firearm::bullet::bullet::Bullet;
+use crate::bullet::bullet::Bullet;
 use crate::movement::gravity::gravity_2d::Mass;
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::movement::{gravity::gravity_2d::GravityAffected};

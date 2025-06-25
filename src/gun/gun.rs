@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
-use crate::entities::firearm::bullet::{Bullet,MakeBullet};
+use crate::bullet::bullet::Bullet;
+use crate::bullet::bullet_maker_trait::MakeBullet;
 use crate::entities::object::Object;
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::utillity::timing::SelfDestructTimer;

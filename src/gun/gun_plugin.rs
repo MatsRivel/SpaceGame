@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{entities::{firearm::{bullet::BulletFactory, gun::{fire_bullet, give_player_gun}}, player::{spawn_player, PlayerTag}}, movement::velocity::throttle_velocity::throttle_bullet_velocity, utillity::timing::self_destruct_countdown};
+use crate::{bullet::bullet_factory::BulletFactory, entities::player::{spawn_player, PlayerTag}, gun::gun::{fire_bullet, give_player_gun}, movement::velocity::throttle_velocity::throttle_bullet_velocity, utillity::timing::self_destruct_countdown};
 pub struct GunPlugin;
 impl Plugin for GunPlugin{
     fn build(&self, app: &mut App) {
