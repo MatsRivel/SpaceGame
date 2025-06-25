@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{addition_functions::*, entities::asteroid::destroy_asteroid, gun::gun_plugin::GunPlugin, plugins::{gravity_plugin::GravityPlugin, world_wrap_plugin::WorldWrapPlugin}, thrusters::thrusters_plugin::ThrusterPlugin};
+use crate::{addition_functions::*, entities::asteroid::destroy_asteroid, gravity::gravity_plugin::GravityPlugin, gun::gun_plugin::GunPlugin, plugins::world_wrap_plugin::WorldWrapPlugin, thrusters::thrusters_plugin::ThrusterPlugin};
 mod movement;
 mod entities;
 mod utillity;
@@ -10,6 +10,7 @@ mod plugins;
 mod thrusters;
 mod gun;
 mod bullet;
+mod gravity;
 
 const WORLD_HEIGHT: f32 = 20_000.0f32;
 const WORLD_WIDTH: f32 = 20_000.0f32;

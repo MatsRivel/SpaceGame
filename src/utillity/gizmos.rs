@@ -1,9 +1,9 @@
 use bevy::color::palettes::css::{GREEN, ORANGE, PURPLE, RED, WHITE, YELLOW};
 use bevy::prelude::*;
 use crate::entities::player::PlayerTag;
-use crate::movement::gravity::gravity_2d::{GravityProducer, Mass, EVENT_HORIZON_DISTANCE, HIGH_GRAVITY_DISTANCE, LOW_GRAVITY_DISTANCE, NO_GRAVITY_DISTANCE};
+use crate::gravity::gravity_2d::{GravityProducer, Mass, EVENT_HORIZON_DISTANCE, HIGH_GRAVITY_DISTANCE, LOW_GRAVITY_DISTANCE, NO_GRAVITY_DISTANCE};
+use crate::gravity::gravity_plugin::GRAVITY_FUNC;
 use crate::movement::velocity::linear_velocity::Velocity;
-use crate::plugins::gravity_plugin::GRAVITY_FUNC;
 use crate::utillity::forward::ForwardUnit;
 
 #[derive(Default, Reflect, GizmoConfigGroup)]

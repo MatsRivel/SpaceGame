@@ -1,9 +1,9 @@
+use crate::gravity::gravity_2d::GravityAffected;
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
-use crate::movement::gravity::gravity_2d::GravityAffected;
 use crate::movement::velocity::angular_velocity::AngularVelocity;
 use crate::movement::velocity::linear_acceleration::LinearAcceleration;
-use crate::thrusters::thrusters::{HasThrusters, Thrusters};
+use crate::thrusters::{HasThrusters, Thrusters};
 use crate::{PLAYER_BODY_IMAGE_PATH,PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
 use crate::entities::object::Object;
 use bevy::prelude::*;
@@ -26,8 +26,6 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>){
     println!("Player Entity: {player_entity:?}");
 }
 
-
-
 fn get_thrust(possible_children: Option<&Children>, possible_thrusters: Option<&HasThrusters>, thruster_query: Query<&Thrusters>)->f32{
     if possible_thrusters.is_some() && let Some(children) = possible_children{
         children
@@ -39,6 +37,7 @@ fn get_thrust(possible_children: Option<&Children>, possible_thrusters: Option<&
         1.0
     }
 }
+
 #[allow(clippy::type_complexity)] // Does not make sense to pull these from the query.
 pub fn accelerate_player(
     time: Res<Time>,

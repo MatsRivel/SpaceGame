@@ -1,9 +1,8 @@
 use bevy::prelude::*;
 use rand::Rng;
-use crate::bullet::bullet::Bullet;
-use crate::movement::gravity::gravity_2d::Mass;
+use crate::bullet::Bullet;
+use crate::gravity::gravity_2d::{GravityAffected, Mass};
 use crate::movement::velocity::linear_velocity::Velocity;
-use crate::movement::{gravity::gravity_2d::GravityAffected};
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::{ASTEROID_SPEED_MODIFIER};
 use crate::entities::object::Object;

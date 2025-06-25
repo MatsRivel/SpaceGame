@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::movement::gravity::gravity_2d::{GravityProducer, Mass};
+use crate::gravity::gravity_2d::{GravityProducer, Mass};
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::entities::object::Object;
 use crate::GRAVITY_WELL_STRENGTH;

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::bullet::bullet::Bullet;
+use crate::bullet::Bullet;
 use crate::entities::asteroid::Asteroid;
 use crate::entities::player::PlayerTag;
 use crate::movement::{velocity::linear_velocity::Velocity};

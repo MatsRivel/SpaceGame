@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{entities::player::{spawn_player, PlayerTag},PLAYER_THRUSTER_STRENGTH};
-use crate::thrusters::thrusters::{HasThrusters,Thrusters};
+use crate::thrusters::{HasThrusters,Thrusters};
 pub struct ThrusterPlugin;
 impl Plugin for ThrusterPlugin{
     fn build(&self, app: &mut App) {
