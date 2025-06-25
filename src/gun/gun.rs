@@ -43,7 +43,7 @@ impl <T: BulletMakerRequirements>Default for Gun<T>{
         }
     }
 }
-
+#[allow(clippy::type_complexity)] // Does not make sense to try to extract this from the query
 pub fn fire_bullet<PlayerIdentification:Component, BulletCreator:BulletMakerRequirements>(
     mut commands: Commands, 
     keyboard_input: Res<ButtonInput<KeyCode>>, 

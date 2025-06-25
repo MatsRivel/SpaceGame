@@ -74,6 +74,7 @@ pub mod gravity_2d{
             &self.force
         }
     }
+    #[allow(clippy::type_complexity)] // Does not make sense to make type for this query.
     pub fn build_gravity_function<F>(
         gravity_function: F,
     ) -> impl Fn(
@@ -118,11 +119,11 @@ pub mod gravity_2d{
             let direction = delta.normalize();
             let relative_force = force_multiplier * force* player_mass *producer_mass / dist;
             let delta_time_force = relative_force * delta_time * 0.5;
-            let saviour_vec = GravityProducer::saviour_movement(dist,direction).or(Some(Vec2::ZERO)).unwrap();
+            let saviour_vec = GravityProducer::saviour_movement(dist,direction).unwrap_or(Vec2::ZERO);
             let applied_vec = (direction + saviour_vec)* delta_time_force ;
             return applied_vec;
         }
-        return Vec2::ZERO;
+        Vec2::ZERO
     }
     #[allow(unused)]
     // 2D but with real gravity. Falls off much faster.
@@ -136,7 +137,7 @@ pub mod gravity_2d{
             let applied_vec = direction* delta_time_force;
             return applied_vec;
         }
-        return Vec2::ZERO;
+        Vec2::ZERO
     }
     /// 2D version of gravity. Stronger at a distance, same nearby. Falls off slower.
     pub fn gravity_calculation_flat_true(producer_transform: &Vec2, force: f32, producer_mass: f32, player_pos: &Vec2, player_mass: f32, delta_time: f32)->Vec2{
@@ -149,7 +150,7 @@ pub mod gravity_2d{
             let applied_vec = direction* delta_time_force;
             return applied_vec;
         }
-        return Vec2::ZERO;
+        Vec2::ZERO
     }
     #[allow(unused)]
     /// 2D version of gravity. Stronger at a distance, same nearby. Falls off slower.
@@ -158,14 +159,14 @@ pub mod gravity_2d{
         let delta = producer_transform - player_pos;
         if delta != Vec2::ZERO && dist < TRUE_GRAVITY_DISTANCE{
             let direction = delta.normalize();
-            let saviour_vec = GravityProducer::saviour_movement(dist,direction).or(Some(Vec2::ZERO)).unwrap();
+            let saviour_vec = GravityProducer::saviour_movement(dist,direction).unwrap_or(Vec2::ZERO);
             let relative_force = force* player_mass *producer_mass / dist;
             let delta_time_force = relative_force * delta_time * 0.5;
             let applied_vec = (direction + saviour_vec)* delta_time_force;
             
             return applied_vec;
         }
-        return Vec2::ZERO;
+        Vec2::ZERO
     }
 
     #[derive(Component)]
@@ -173,6 +174,7 @@ pub mod gravity_2d{
     #[derive(Event,Debug)]
     pub struct EnteredEventHorizon(Entity);
 
+    #[allow(clippy::type_complexity)] // Does not make sense to make type for this query.
     pub fn event_horizon_entry_event(
         mut commands: Commands,
         gravity_well_query: Query<&Transform, With<GravityWell>>,

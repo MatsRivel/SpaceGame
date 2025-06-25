@@ -41,9 +41,9 @@ impl Add<Vec2> for Velocity{
     }
 }
 
-impl Into<Vec3> for Velocity{
-    fn into(self) -> Vec3 {
-        self.0.extend(0.0)
+impl From<Velocity> for Vec3{
+    fn from(value: Velocity) -> Self {
+        value.0.extend(0.0)
     }
 }
 

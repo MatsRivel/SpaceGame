@@ -30,15 +30,16 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>){
 
 fn get_thrust(possible_children: Option<&Children>, possible_thrusters: Option<&HasThrusters>, thruster_query: Query<&Thrusters>)->f32{
     if possible_thrusters.is_some() && let Some(children) = possible_children{
-        return children
+        children
             .iter()
             .filter_map(|child| thruster_query.get(child).ok())
             .map(|thruster| **thruster)
-            .sum();
+            .sum()
     }else{
-        return 1.0;
+        1.0
     }
 }
+#[allow(clippy::type_complexity)] // Does not make sense to pull these from the query.
 pub fn accelerate_player(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,

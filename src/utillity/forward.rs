@@ -9,7 +9,6 @@ impl ForwardUnit<Vec3> for &Transform{
         let (_,_,theta) = rot.to_euler(EulerRot::XYZ);
         let x = -f32::sin(theta);
         let y = f32::cos(theta);
-        let forward = Vec2::new(x,y).extend(0.0);
-        return forward;
+        Vec2::new(x,y).extend(0.0)
     }
 }

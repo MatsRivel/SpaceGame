@@ -51,12 +51,12 @@ impl Add<Vec2> for LinearAcceleration{
         Self::new(self.0 + rhs)
     }
 }
-
-impl Into<Vec3> for LinearAcceleration{
-    fn into(self) -> Vec3 {
-        self.0.extend(0.0)
+impl From<LinearAcceleration> for Vec3{
+    fn from(value: LinearAcceleration) -> Self {
+        value.0.extend(0.0)
     }
 }
+
 impl AddAssign<LinearAcceleration> for Velocity{
     fn add_assign(&mut self, rhs: LinearAcceleration) {
         self.add(rhs.0);

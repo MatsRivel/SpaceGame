@@ -87,7 +87,7 @@ pub fn draw_player_trajectory<const N: usize>(
     // Collect producer data first, so we don't hold the borrow
     let producers: Vec<(Vec2,f32,f32)> = gravity_query
         .iter()
-        .map(|(transform, producer, mass)| ((transform.translation.truncate()).clone(), **producer, **mass).clone()).collect();
+        .map(|(transform, producer, mass)| (transform.translation.truncate(), **producer, **mass)).collect();
 
     let (player_transform, player_mass,player_velocity) = player_query.into_inner();
     let player_pos = player_transform.translation.truncate();
