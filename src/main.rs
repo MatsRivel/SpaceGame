@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{addition_functions::*, entities::asteroid::other_destory_asteroide, gun::gun_plugin::GunPlugin, plugins::{gravity_plugin::GravityPlugin, world_wrap_plugin::WorldWrapPlugin}, thrusters::thrusters_plugin::ThrusterPlugin};
+use crate::{addition_functions::*, entities::asteroid::destroy_asteroid, gun::gun_plugin::GunPlugin, plugins::{gravity_plugin::GravityPlugin, world_wrap_plugin::WorldWrapPlugin}, thrusters::thrusters_plugin::ThrusterPlugin};
 mod movement;
 mod entities;
 mod utillity;
@@ -63,7 +63,7 @@ fn main() {
     // add_player_thrusters(&mut app);
     #[cfg(debug_assertions)]
     add_gizmos(&mut app);
-    app.add_observer(other_destory_asteroide);
+    app.add_observer(destroy_asteroid);
 
     app.run();
 }

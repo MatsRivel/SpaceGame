@@ -8,7 +8,7 @@ use crate::movement::velocity::angular_velocity::apply_angular_velocity_to_posit
 use crate::movement::velocity::linear_acceleration::apply_linear_acceleration;
 use crate::movement::velocity::linear_velocity::apply_linear_velocity_to_position;
 use crate::entities::asteroid::{
-        initialize_asteroide_veloccity, spawn_asteroides, spawn_friendly_asteroide, DestroyAsteroid
+        check_asteroid_bullet_collisions, initialize_asteroide_veloccity, spawn_asteroides, spawn_friendly_asteroide, DestroyAsteroid
     };
 use crate::movement::velocity::throttle_velocity::{
     throttle_asteroid_velocity, 
@@ -58,6 +58,7 @@ pub fn add_asteroid(app: &mut App){
             initialize_asteroide_veloccity.after(spawn_asteroides)
         )).add_systems(Update, (
             throttle_asteroid_velocity,
+            check_asteroid_bullet_collisions
         )).add_event::<DestroyAsteroid>();
 }
 pub fn add_gravity_well(app: &mut App){
