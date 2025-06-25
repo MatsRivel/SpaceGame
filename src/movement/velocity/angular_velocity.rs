@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use std::ops::{AddAssign, Mul};
+use std::ops::{AddAssign};
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 
 #[derive(Component, Default, Debug, Clone, Copy)]
@@ -7,6 +7,7 @@ use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 pub struct AngularVelocity(f32);
 
 impl AngularVelocity{
+    #[allow(unused)]
     pub fn new(velocity: f32)->Self{
         Self(velocity)
     }

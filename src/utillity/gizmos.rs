@@ -1,8 +1,7 @@
-use bevy::color::palettes::css::{BLUE, DARK_RED, GREEN, INDIAN_RED, ORANGE, PURPLE, RED, WHITE, WHITE_SMOKE, YELLOW};
+use bevy::color::palettes::css::{GREEN, ORANGE, PURPLE, RED, WHITE, YELLOW};
 use bevy::prelude::*;
 use crate::entities::player::PlayerTag;
-use crate::movement::gravity::gravity_2d::{gravity_calculation_flat_true, gravity_calculation_true, GravityProducer, Mass, EVENT_HORIZON_DISTANCE, HIGH_GRAVITY_DISTANCE, LOW_GRAVITY_DISTANCE, NO_GRAVITY_DISTANCE};
-use crate::movement::velocity::linear_acceleration::LinearAcceleration;
+use crate::movement::gravity::gravity_2d::{GravityProducer, Mass, EVENT_HORIZON_DISTANCE, HIGH_GRAVITY_DISTANCE, LOW_GRAVITY_DISTANCE, NO_GRAVITY_DISTANCE};
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::plugins::gravity_plugin::GRAVITY_FUNC;
 use crate::utillity::forward::ForwardUnit;
@@ -11,7 +10,7 @@ use crate::utillity::forward::ForwardUnit;
 pub struct MyArrowGizmos;
 pub fn draw_arrow(
     mut gizmos: Gizmos,
-    mut my_gizmos: Gizmos<MyArrowGizmos>,
+    _: Gizmos<MyArrowGizmos>,
     query: Single<&Transform, With<PlayerTag>>
 ) {
     let transform = query.into_inner();
@@ -29,7 +28,7 @@ pub fn draw_arrow(
 
 pub fn to_well(
     mut gizmos: Gizmos,
-    mut my_gizmos: Gizmos<MyArrowGizmos>,
+    _: Gizmos<MyArrowGizmos>,
     query: Single<&Transform, With<PlayerTag>>,
     well_query: Query<&Transform, With<GravityProducer>>
 ) {
@@ -48,7 +47,7 @@ pub fn to_well(
 
 pub fn draw_gravity_falloff(
     mut gizmos: Gizmos,
-    mut my_gizmos: Gizmos<MyArrowGizmos>,
+    _: Gizmos<MyArrowGizmos>,
     query: Query<&Transform, With<GravityProducer>>,
 ) {
     for position in query.iter().map(|well| well.translation.truncate()){
@@ -81,7 +80,7 @@ pub fn draw_gravity_falloff(
 pub fn draw_player_trajectory<const N: usize>(
     time: Res<Time>,
     mut gizmos: Gizmos,
-    mut my_gizmos: Gizmos<MyArrowGizmos>,
+    _: Gizmos<MyArrowGizmos>,
     gravity_query: Query<(&Transform, &GravityProducer, &Mass)>,
     player_query: Single<(&Transform, &Mass, &Velocity), With<PlayerTag>>
 ) {

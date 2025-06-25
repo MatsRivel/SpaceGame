@@ -2,7 +2,7 @@ pub mod gravity_2d{
     use std::ops::Deref;
     use bevy::prelude::*;
 
-    use crate::{entities::gravity_well::GravityWell, movement::velocity::{linear_acceleration::LinearAcceleration, linear_velocity::Velocity}};
+    use crate::{entities::gravity_well::GravityWell, movement::velocity::{linear_acceleration::LinearAcceleration}};
     pub const EVENT_HORIZON_DISTANCE: f32 = 1000.0;
     pub const SAVIOUR_ZONE_DISTANCE: f32 = 3500.0;
     pub const HIGH_GRAVITY_DISTANCE: f32 = 3000.0;
@@ -49,6 +49,7 @@ pub mod gravity_2d{
         pub fn new(force: f32) -> Self {
             Self { force }
         }
+        #[allow(unused)]
         pub fn force_multiplier_simplified(dist:f32)->Option<f32>{
             match dist{
                 ..EVENT_HORIZON_DISTANCE => Some(EVENT_HORIZON_STRENGTH),
@@ -108,6 +109,7 @@ pub mod gravity_2d{
             }
         }
     }
+    #[allow(unused)]
     // Descrete psudo-gravity.
     pub fn gravity_calculation_simplified(producer_transform: &Vec2, force: f32, producer_mass: f32, player_pos: &Vec2, player_mass: f32, delta_time: f32)->Vec2{
         let dist = player_pos.distance(*producer_transform);
@@ -122,6 +124,7 @@ pub mod gravity_2d{
         }
         return Vec2::ZERO;
     }
+    #[allow(unused)]
     // 2D but with real gravity. Falls off much faster.
     pub fn gravity_calculation_true(producer_transform: &Vec2, force: f32, producer_mass: f32, player_pos: &Vec2, player_mass: f32, delta_time: f32)->Vec2{
         let dist = player_pos.distance(*producer_transform);
@@ -148,7 +151,7 @@ pub mod gravity_2d{
         }
         return Vec2::ZERO;
     }
-
+    #[allow(unused)]
     /// 2D version of gravity. Stronger at a distance, same nearby. Falls off slower.
     pub fn gravity_calculation_flat_saviour(producer_transform: &Vec2, force: f32, producer_mass: f32, player_pos: &Vec2, player_mass: f32, delta_time: f32)->Vec2{
         let dist = player_pos.distance(*producer_transform);

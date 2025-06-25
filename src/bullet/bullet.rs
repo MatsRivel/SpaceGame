@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::{entities::object::Object, movement::gravity::gravity_2d::GravityAffected, utillity::timing::SelfDestructTimer};
 
+#[allow(unused)] // We allow some fields to be unused, as damage mechanics does not exist yet
 #[derive(Component)]
 #[require(Object, GravityAffected, SelfDestructTimer)]
 pub struct Bullet{

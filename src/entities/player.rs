@@ -1,15 +1,12 @@
-use std::f32::consts::PI;
-
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::gravity::gravity_2d::GravityAffected;
 use crate::movement::velocity::angular_velocity::AngularVelocity;
 use crate::movement::velocity::linear_acceleration::LinearAcceleration;
 use crate::thrusters::thrusters::{HasThrusters, Thrusters};
-use crate::{PLAYER_BODY_IMAGE_PATH, PLAYER_BULLET_IMAGE_PATH, PLAYER_GUN_IMAGE_PATH, PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
+use crate::{PLAYER_BODY_IMAGE_PATH,PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
 use crate::entities::object::Object;
 use bevy::prelude::*;
-pub const GUN_IMAGE_ROTATION_ADJUSTION: f32 = 232.0*PI/180.0;
 
 #[derive(Component, Default)]
 #[require(Object, GravityAffected, RotationalSpeedModifier, AngularVelocity)]

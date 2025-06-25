@@ -11,6 +11,7 @@ impl LinearAcceleration{
     pub fn new(acceleration: Vec2)->Self{
         Self(acceleration)
     }
+    #[allow(unused)]
     pub fn limit(&mut self, limit: f32){
         let acc = self.0.length();
         if acc > limit{
@@ -18,6 +19,7 @@ impl LinearAcceleration{
             self.0 = self.0.normalize() * limit;
         }
     }
+    #[allow(unused)]
     pub fn add(&mut self, value: Vec2){
         self.0 += value;
     }

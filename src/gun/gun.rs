@@ -12,6 +12,7 @@ pub trait BulletMakerRequirements: MakeBullet +Default +Clone +Send +Sync +'stat
 #[derive(Component, Default)]
 pub struct HasGunTag;
 
+#[allow(unused)] // We allow certain fields to be unused for now, as damage mechanics does not exist yet.
 #[derive(Component, Clone)]
 #[require(HasGunTag, Object)]
 pub struct Gun<T: BulletMakerRequirements>{

@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 use rand::Rng;
 use crate::bullet::bullet::Bullet;
-use crate::entities::player::PlayerTag;
 use crate::movement::gravity::gravity_2d::Mass;
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::movement::{gravity::gravity_2d::GravityAffected};
@@ -36,8 +35,6 @@ pub struct Destructible;
 pub fn spawn_friendly_asteroide(mut commands: Commands, asset_server: Res<AssetServer>){
     let asset_path = r"sprites\Asteroids\big-a.png";
     let image = asset_server.load(asset_path);
-    let mut rng = rand::rng();
-    let mut observer = Observer::new(destroy_asteroid);
     let mut sprite = Sprite::from_image(image.clone());
     sprite.custom_size = Some(Vec2::new(256.0, 256.0));
     let sprite = sprite;
@@ -57,7 +54,7 @@ pub fn spawn_friendly_asteroide(mut commands: Commands, asset_server: Res<AssetS
 
 pub fn check_asteroid_bullet_collisions(
     mut commands: Commands,
-    asteroid_query: Query<(Entity, &Transform), (With<Destructible>)>,
+    asteroid_query: Query<(Entity, &Transform), With<Destructible>>,
     bullet_query: Query<&Transform, With<Bullet>>,
 ) {
     let destruction_distance = 50.0;
