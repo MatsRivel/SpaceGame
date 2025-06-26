@@ -50,7 +50,7 @@ impl From<Velocity> for Vec3{
 pub fn apply_linear_velocity_to_position(mut query: Query<(&mut Transform, &Velocity, &LinearSpeedModifier)>
 ){
     for (mut transform, &velocity_2d, &speed_mod) in query.iter_mut() {
-        let adjusted_speed = *speed_mod;// * time.delta_secs();
+        let adjusted_speed = *speed_mod;
         let velocity_3d: Vec3 = velocity_2d.into();
         let velocity_adjusted = velocity_3d * adjusted_speed;
         let limited_velocity = match velocity_adjusted.length() >  MAXIMUM_LINEAR_STEP_LENGTH{

@@ -4,8 +4,8 @@ use crate::destruction::{check_for_destruction, destroy_asteroid, DestroySomethi
 use crate::gravity::gravity_2d::{GravityAffected, Mass};
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
-use crate::movement::velocity::throttle_velocity::throttle_asteroid_velocity;
-use crate::{ASTEROID_SPEED_MODIFIER};
+use crate::movement::velocity::throttle_velocity;
+use crate::{ASTEROID_SPEED_MODIFIER, MAXIMUM_LINEAR_ASTEROID_SPEED};
 use crate::entities::object::Object;
 
 #[derive(Component)]
@@ -83,7 +83,7 @@ impl Plugin for AsteroidPlugin{
                 spawn_friendly_asteroide,
                 initialize_asteroide_veloccity.after(spawn_asteroides)
             )).add_systems(Update, (
-                throttle_asteroid_velocity,
+                throttle_velocity::throttle_velocity::<Asteroid,MAXIMUM_LINEAR_ASTEROID_SPEED>,
                 check_for_destruction
             )).add_event::<DestroySomething>();
     }

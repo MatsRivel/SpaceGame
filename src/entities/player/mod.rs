@@ -3,9 +3,9 @@ use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::velocity::angular_velocity::AngularVelocity;
 use crate::movement::velocity::acceleration::linear_acceleration::LinearAcceleration;
-use crate::movement::velocity::throttle_velocity::throttle_player_velocity;
+use crate::movement::velocity::throttle_velocity::throttle_velocity;
 use crate::thrusters::{HasThrusters, Thrusters};
-use crate::{PLAYER_BODY_IMAGE_PATH,PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
+use crate::{MAXIMUM_LINEAR_PLAYER_SPEED, PLAYER_BODY_IMAGE_PATH, PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
 use crate::entities::object::Object;
 use bevy::prelude::*;
 
@@ -40,10 +40,10 @@ fn get_thrust(possible_children: Option<&Children>, possible_thrusters: Option<&
 }
 
 #[allow(clippy::type_complexity)] // Does not make sense to pull these from the query.
-pub fn accelerate_player(
+pub fn apply_acceleration_to_single_from_keyboard<T:Component>(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    player_query: Single<(&Transform, &mut LinearAcceleration, Option<&Children>, Option<&HasThrusters>), With<PlayerTag>>,
+    player_query: Single<(&Transform, &mut LinearAcceleration, Option<&Children>, Option<&HasThrusters>), With<T>>,
     thruster_query: Query<&Thrusters>
 ){
     let (transform, mut acceleration, possible_children, possible_thrusters) = player_query.into_inner();
@@ -71,10 +71,10 @@ pub fn accelerate_player(
     *acceleration += delta_time_movement;
 }
 
-pub fn rotate_player(
+pub fn apply_rotation_velocity<T:Component>(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
-    query: Single<(&mut AngularVelocity, &RotationalSpeedModifier), With<PlayerTag>>,
+    query: Single<(&mut AngularVelocity, &RotationalSpeedModifier), With<T>>,
 ){
     let (mut angular_velocity, rotational_modifier) = query.into_inner();
     let clockwise = keyboard_input.pressed(KeyCode::KeyD);
@@ -94,9 +94,9 @@ impl Plugin for PlayerPlugin{
                 app.add_systems(Startup, 
             spawn_player)
         .add_systems(Update, (
-            rotate_player, 
-            accelerate_player, 
-            throttle_player_velocity
+            apply_rotation_velocity::<PlayerTag>, 
+            apply_acceleration_to_single_from_keyboard::<PlayerTag>, 
+            throttle_velocity::<PlayerTag,MAXIMUM_LINEAR_PLAYER_SPEED>
         ));
     }
 }

@@ -1,7 +1,43 @@
 use bevy::prelude::*;
 
+pub trait HitBoxTrait{
+    fn is_in_hit_box(lhs: Vec2, rhs: Vec2)->bool;
+}
 
 #[derive(Component,Debug,Default,Clone,Copy)]
+pub struct PointHitBox;
+impl HitBoxTrait for PointHitBox{
+    fn is_in_hit_box(lhs: Vec2, rhs: Vec2)->bool {
+        lhs == rhs
+    }
+}
+
+#[derive(Component,Debug,Default,Clone,Copy)]
+pub struct CircularHitBox{
+    pub offset: Vec2,
+    pub radius: f32
+}
+
+#[derive(Component,Debug,Default,Clone,Copy)]
+pub struct SquareHitBox;
+
+#[derive(Component,Debug,Default,Clone,Copy)]
+pub struct RectangleHitBox;
+
+#[derive(Component,Debug,Clone,Copy)]
+pub enum HitBox{
+    Point(PointHitBox),
+    Circle(CircularHitBox),
+    Square(SquareHitBox),
+    Rectangle(RectangleHitBox)
+}
+impl Default for HitBox{
+    fn default() -> Self {
+        Self::Circle(CircularHitBox{offset:Vec2::ZERO, radius:1.0})
+    }
+}
+#[derive(Component,Debug,Default,Clone,Copy)]
+#[require(HitBox)]
 pub struct Destructible;
 
 #[derive(Component,Debug,Default,Clone,Copy)]
@@ -18,15 +54,6 @@ pub fn destroy_destructible(trigger: Trigger<DestroySomething>, mut commands: Co
         dbg!("Something was destroyed!");
     }
 }
-pub fn destroy_asteroid(trigger: Trigger<DestroySomething>, mut commands: Commands) {
-    dbg!("'destroy_asteroid' was triggered!");
-    let id = trigger.target();
-    if let Ok(mut entity) = commands.get_entity(id) {
-        entity.despawn();
-        dbg!("Asteroid was destroyed!");
-    }
-}
-
 
 pub fn check_for_destruction(
     mut commands: Commands,
