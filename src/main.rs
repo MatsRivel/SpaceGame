@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+use crate::camera::MyCameraPlugin;
 use crate::thrusters::thrusters_plugin::ThrusterPlugin;
 use crate::plugins::{world_wrap_plugin::WorldWrapPlugin};
 use crate::gun::{gun_plugin::GunPlugin};
@@ -60,12 +61,12 @@ fn main() {
         GravityPlugin,
         ThrusterPlugin,
         WorldWrapPlugin,
-        AsteroidPlugin
+        AsteroidPlugin,
+        MyCameraPlugin
     ));
     app.insert_resource(ClearColor(SKY_COLOR));
     app.insert_resource(Time::<Fixed>::from_hz(30.0)) ;//This messe s with time.
     
-    add_camera(&mut app);
     add_player(&mut app);
     add_movement(&mut app);
     add_gravity_well(&mut app);

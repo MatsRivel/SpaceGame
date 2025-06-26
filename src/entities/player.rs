@@ -2,7 +2,7 @@ use crate::gravity::gravity_2d::GravityAffected;
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::velocity::angular_velocity::AngularVelocity;
-use crate::movement::velocity::linear_acceleration::LinearAcceleration;
+use crate::movement::velocity::acceleration::linear_acceleration::LinearAcceleration;
 use crate::thrusters::{HasThrusters, Thrusters};
 use crate::{PLAYER_BODY_IMAGE_PATH,PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
 use crate::entities::object::Object;

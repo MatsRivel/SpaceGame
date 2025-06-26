@@ -1,7 +1,7 @@
 use std::ops::Deref;
 use bevy::prelude::*;
 
-use crate::{entities::gravity_well::GravityWell, movement::velocity::{linear_acceleration::LinearAcceleration}};
+use crate::{entities::gravity_well::GravityWell, movement::velocity::{acceleration::linear_acceleration::LinearAcceleration}};
 pub const EVENT_HORIZON_DISTANCE: f32 = 1000.0;
 pub const SAVIOUR_ZONE_DISTANCE: f32 = 3500.0;
 pub const HIGH_GRAVITY_DISTANCE: f32 = 3000.0;
