@@ -1,13 +1,13 @@
 use bevy::prelude::*;
 
 pub trait HitBoxTrait{
-    fn is_in_hit_box(lhs: Vec2, rhs: Vec2)->bool;
+    fn is_in_hit_box(&self,lhs: Vec2, rhs: Vec2)->bool;
 }
 
 #[derive(Component,Debug,Default,Clone,Copy)]
 pub struct PointHitBox;
 impl HitBoxTrait for PointHitBox{
-    fn is_in_hit_box(lhs: Vec2, rhs: Vec2)->bool {
+    fn is_in_hit_box(&self,lhs: Vec2, rhs: Vec2)->bool {
         lhs == rhs
     }
 }
@@ -16,6 +16,29 @@ impl HitBoxTrait for PointHitBox{
 pub struct CircularHitBox{
     pub offset: Vec2,
     pub radius: f32
+}
+impl CircularHitBox{
+    pub fn new(offset:Vec2,radius:f32)->Self{
+        Self{offset,radius}
+    }
+}
+impl HitBoxTrait for CircularHitBox{
+    fn is_in_hit_box(&self,lhs: Vec2, rhs: Vec2)->bool {
+        let temp = lhs + self.offset;
+        temp.distance(rhs) <= self.radius
+    }
+}
+#[derive(Component,Debug,Default,Clone,Copy)]
+pub struct FourPointHitBox{
+    top_left: Vec2,
+    top_right: Vec2,
+    bottom_left: Vec2,
+    bottom_right: Vec2
+}
+impl FourPointHitBox{
+    pub fn new(top_left: Vec2,top_right: Vec2,bottom_left: Vec2,bottom_right: Vec2)->Self{
+        Self { top_left, top_right, bottom_left, bottom_right}
+    }
 }
 
 #[derive(Component,Debug,Default,Clone,Copy)]
