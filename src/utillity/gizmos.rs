@@ -110,10 +110,11 @@ pub fn draw_player_trajectory<const N: usize>(
 pub struct GizmoPlugins;
 impl Plugin for GizmoPlugins{
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (
-            draw_player_trajectory::<TRAJECTORY_LENGTH>,
-            draw_arrow,
-            draw_gravity_falloff,
+        app.init_gizmo_group::<MyArrowGizmos>()
+            .add_systems(Update, (
+                draw_player_trajectory::<TRAJECTORY_LENGTH>,
+                draw_arrow,
+                draw_gravity_falloff,
         ));
     }
 }

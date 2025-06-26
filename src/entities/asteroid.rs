@@ -1,5 +1,8 @@
+use bevy::math::VectorSpace;
 use bevy::prelude::*;
 use rand::Rng;
+use crate::destruction::health::Health;
+use crate::destruction::hitbox::{CircularHitBox, HitBox};
 use crate::destruction::{check_for_destruction, DestroySomething, Destructible};
 use crate::gravity::gravity_2d::{GravityAffected, Mass};
 use crate::movement::velocity::linear_velocity::Velocity;
@@ -39,7 +42,8 @@ pub fn spawn_asteroides(mut commands: Commands, asset_server: Res<AssetServer>){
             Transform::from_translation(Vec3::new(rng.random_range(-1.0..1.0) * 5000.0 , 3000.0* rng.random_range(-1.0..1.0), 0.0)),
             LinearSpeedModifier::new(ASTEROID_SPEED_MODIFIER*rng.random_range(1.0..10.0)),
             Mass::new(1.0),
-            Destructible
+            Destructible,
+            HitBox::Circle(CircularHitBox::new(Vec2::ZERO, size/2.0))
         ));
     }
 }
@@ -57,7 +61,9 @@ pub fn spawn_friendly_asteroide(mut commands: Commands, asset_server: Res<AssetS
         Transform::from_translation(Vec3::new(0.0, 300.0, 0.0)),
         LinearSpeedModifier::new(0.0),
         Mass::new(1.0),
-        Destructible
+        Destructible,
+        HitBox::Circle(CircularHitBox::new(Vec2::ZERO, size/2.0)),
+        Health::new(100.0)
     )).id();
     // Create a global observer watching this entity. Triggers only for this entity.
     // let mut observer = Observer::new(destroy_asteroid);

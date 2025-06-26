@@ -8,7 +8,7 @@ use crate::thrusters::thrusters_plugin::ThrusterPlugin;
 use crate::gun::{gun_plugin::GunPlugin};
 use crate::gravity::{gravity_plugin::GravityPlugin};
 use crate::entities::asteroid::AsteroidPlugin;
-use crate::destruction::destroy_destructible;
+use crate::destruction::DestructionPlugin;
 use crate::utillity::gizmos::GizmoPlugins;
 use crate::utillity::wrap_map::WorldWrapPlugin;
 
@@ -28,7 +28,7 @@ const WORLD_WIDTH: f32 = 20_000.0f32;
 const PLAYER_THRUSTER_STRENGTH: f32 = 200.0f32;
 const PLAYER_SPEED_MODIFIER: f32 = 2.0f32;
 const PLAYER_ROT_SPEED_MODIFIER: f32 = 1.0f32;
-const ASTEROID_SPEED_MODIFIER: f32 = 10.0f32;
+const ASTEROID_SPEED_MODIFIER: f32 = 1.0f32;
 const BULLET_SPEED_MODIFIER: f32 = 25.0f32;
 
 const GRAVITY_WELL_STRENGTH: f32 = 9.8f32;
@@ -68,9 +68,9 @@ fn main() {
         MyCameraPlugin,
         LinearMovement2DPlugin,
         GravityWellPlugin,
-        PlayerPlugin
+        PlayerPlugin,
+        DestructionPlugin
     ));
-    app.add_observer(destroy_destructible); // Global Observer. Triggers for any event.
 
     #[cfg(debug_assertions)]
     {
