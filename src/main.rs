@@ -1,6 +1,13 @@
 use bevy::prelude::*;
 
-use crate::{addition_functions::*, destruction::destroy_destructible, gravity::gravity_plugin::GravityPlugin, gun::gun_plugin::GunPlugin, plugins::world_wrap_plugin::WorldWrapPlugin, thrusters::thrusters_plugin::ThrusterPlugin};
+use crate::thrusters::thrusters_plugin::ThrusterPlugin;
+use crate::plugins::{world_wrap_plugin::WorldWrapPlugin};
+use crate::gun::{gun_plugin::GunPlugin};
+use crate::gravity::{gravity_plugin::GravityPlugin};
+use crate::entities::asteroid::AsteroidPlugin;
+use crate::destruction::destroy_destructible;
+use crate::addition_functions::*;
+
 mod movement;
 mod entities;
 mod utillity;
@@ -12,6 +19,7 @@ mod gun;
 mod bullet;
 mod gravity;
 mod destruction;
+
 const WORLD_HEIGHT: f32 = 20_000.0f32;
 const WORLD_WIDTH: f32 = 20_000.0f32;
 
@@ -51,7 +59,8 @@ fn main() {
         GunPlugin,
         GravityPlugin,
         ThrusterPlugin,
-        WorldWrapPlugin
+        WorldWrapPlugin,
+        AsteroidPlugin
     ));
     app.insert_resource(ClearColor(SKY_COLOR));
     app.insert_resource(Time::<Fixed>::from_hz(30.0)) ;//This messe s with time.
@@ -59,9 +68,7 @@ fn main() {
     add_camera(&mut app);
     add_player(&mut app);
     add_movement(&mut app);
-    add_asteroid(&mut app);
     add_gravity_well(&mut app);
-    // add_player_thrusters(&mut app);
     #[cfg(debug_assertions)]
     add_gizmos(&mut app);
     app.add_observer(destroy_destructible); // Global Observer. Triggers for any event.
