@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use rand::Rng;
-use crate::destruction::{check_for_destruction, destroy_asteroid, DestroySomething, Destructible};
+use crate::destruction::{check_for_destruction, DestroySomething, Destructible};
 use crate::gravity::gravity_2d::{GravityAffected, Mass};
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
