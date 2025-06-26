@@ -3,6 +3,7 @@ use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
 use crate::movement::linear_movement_2d::LinearSpeedModifier;
 use crate::movement::velocity::angular_velocity::AngularVelocity;
 use crate::movement::velocity::acceleration::linear_acceleration::LinearAcceleration;
+use crate::movement::velocity::throttle_velocity::throttle_player_velocity;
 use crate::thrusters::{HasThrusters, Thrusters};
 use crate::{PLAYER_BODY_IMAGE_PATH,PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
 use crate::entities::object::Object;
@@ -85,4 +86,17 @@ pub fn rotate_player(
     };
     
     *angular_velocity += rotational_modifier * rotary_momentum * time.delta_secs();
+}
+
+pub struct PlayerPlugin;
+impl Plugin for PlayerPlugin{
+    fn build(&self, app: &mut App) {
+                app.add_systems(Startup, 
+            spawn_player)
+        .add_systems(Update, (
+            rotate_player, 
+            accelerate_player, 
+            throttle_player_velocity
+        ));
+    }
 }

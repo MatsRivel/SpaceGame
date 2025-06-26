@@ -5,6 +5,7 @@ use crate::gravity::gravity_2d::{GravityProducer, Mass, EVENT_HORIZON_DISTANCE, 
 use crate::gravity::gravity_plugin::GRAVITY_FUNC;
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::utillity::forward::ForwardUnit;
+use crate::TRAJECTORY_LENGTH;
 
 #[derive(Default, Reflect, GizmoConfigGroup)]
 pub struct MyArrowGizmos;
@@ -105,3 +106,4 @@ pub fn draw_player_trajectory<const N: usize>(
         }
     }
 }
+

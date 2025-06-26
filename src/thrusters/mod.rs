@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::movement::velocity::{accelereation::linear_acceleration::LinearAcceleration};
+use crate::movement::velocity::{acceleration::linear_acceleration::LinearAcceleration};
 pub mod thrusters_plugin;
 
 #[derive(Component, Debug)]

@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 use std::ops::Mul;
+
+use crate::movement::velocity::{acceleration::linear_acceleration::apply_linear_acceleration, angular_velocity::apply_angular_velocity_to_position, linear_velocity::apply_linear_velocity_to_position};
 #[derive(Component,Clone, Copy)]
 pub struct LinearSpeedModifier(f32);
 impl LinearSpeedModifier{
@@ -32,5 +34,15 @@ impl Mul<LinearSpeedModifier> for Vec3 {
 
     fn mul(self, rhs: LinearSpeedModifier) -> Self::Output {
         self * *rhs
+    }
+}
+
+pub struct LinearMovement2DPlugin;
+impl Plugin for LinearMovement2DPlugin{
+    fn build(&self, app: &mut App) {
+        app.add_systems(FixedUpdate, (
+            apply_linear_velocity_to_position, 
+            apply_angular_velocity_to_position
+        )).add_systems(Update, apply_linear_acceleration);
     }
 }

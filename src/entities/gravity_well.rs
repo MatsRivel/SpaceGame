@@ -19,3 +19,10 @@ pub fn spawn_gravity_well(mut commands: Commands, asset_server: Res<AssetServer>
         Mass::new(1.0)
     ));
 }
+
+pub struct GravityWellPlugin;
+impl Plugin for GravityWellPlugin{
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup,spawn_gravity_well);
+    }
+}
