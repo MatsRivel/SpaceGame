@@ -1,6 +1,8 @@
+use std::time::Duration;
+
 use bevy::prelude::*;
 
-use crate::{ bullet::{bullet_maker_trait::MakeBullet, Bullet}, gun::BulletMakerRequirements, movement::velocity::linear_velocity::Velocity, utillity::timing::SelfDestructTimer, BULLET_SPEED_MODIFIER};
+use crate::{ bullet::{bullet_maker_trait::MakeBullet, Bullet}, destruction::{DestroyingHitTimer, MultiHitDestroying}, gun::BulletMakerRequirements, movement::velocity::linear_velocity::Velocity, utillity::timing::SelfDestructTimer, BULLET_SPEED_MODIFIER};
 
 
 #[derive(Clone)]
@@ -38,6 +40,7 @@ impl MakeBullet for BulletFactory{
             Transform::from_translation(parent_position.extend(0.0)).with_rotation(*adjusted_rotation),
             sprite,
             SelfDestructTimer::new(self.lifetime)
+            
         )
     }
 }

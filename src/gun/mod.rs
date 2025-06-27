@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::bullet::bullet_maker_trait::MakeBullet;
 use crate::bullet::Bullet;
+use crate::destruction::{DestroyingHitTimer, MultiHitDestroying};
 use crate::entities::object::Object;
 use crate::movement::velocity::linear_velocity::Velocity;
 use crate::utillity::timing::SelfDestructTimer;
@@ -65,7 +66,8 @@ pub fn fire_bullet<PlayerIdentification:Component, BulletCreator:BulletMakerRequ
                 let gun_rotation = gun_transform.rotation();
                 let final_rotation = gun_rotation.rotate_towards(transform.rotation, gun_rotation.angle_between(wielder_rotation));
                 let bullet_bundle = gun.make_bullet_bundle(possible_velocity, &gun_global_pos, &final_rotation);
-                commands.spawn(bullet_bundle);
+                let additional_stuff = (DestroyingHitTimer::new(1000),MultiHitDestroying::new(2));
+                commands.spawn((bullet_bundle,additional_stuff));
             }
         }
     }
