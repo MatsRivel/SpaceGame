@@ -65,6 +65,7 @@ pub struct FourPointHitBox{
     bottom_left: Vec2,
     bottom_right: Vec2
 }
+#[allow(unused)]
 impl FourPointHitBox{
     pub fn new(top_left: Vec2,top_right: Vec2,bottom_left: Vec2,bottom_right: Vec2)->Self{
         Self { top_left, top_right, bottom_left, bottom_right}
@@ -89,7 +90,7 @@ impl HitBoxTrait for FourPointHitBox{
         left_chiral || right_chiral
     }
 }
-
+#[allow(unused)]
 #[derive(Component,Debug,Clone,Copy)]
 pub enum HitBox{
     Point(PointHitBox),

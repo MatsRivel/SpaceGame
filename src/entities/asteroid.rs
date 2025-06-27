@@ -1,4 +1,3 @@
-use bevy::math::VectorSpace;
 use bevy::prelude::*;
 use rand::Rng;
 use crate::destruction::health::Health;
@@ -13,20 +12,7 @@ use crate::entities::object::Object;
 
 #[derive(Component)]
 #[require(Object, GravityAffected)]
-pub struct Asteroid{
-    radius: f32   
-}
-impl Asteroid{
-    pub fn new(radius:f32)->Self{
-        Self{radius}
-    }
-}
-impl Default for Asteroid{
-    fn default() -> Self {
-        Self { radius: 128.0 }
-    }
-}
-
+pub struct Asteroid;
 pub fn spawn_asteroides(mut commands: Commands, asset_server: Res<AssetServer>){
     let size = 128.0;
     let asset_path = r"sprites\Asteroids\med-a.png";
@@ -37,7 +23,7 @@ pub fn spawn_asteroides(mut commands: Commands, asset_server: Res<AssetServer>){
     let sprite = sprite;
     for _ in 0..100{
         commands.spawn((
-            Asteroid::default(),
+            Asteroid,
             sprite.clone(),
             Transform::from_translation(Vec3::new(rng.random_range(-1.0..1.0) * 5000.0 , 3000.0* rng.random_range(-1.0..1.0), 0.0)),
             LinearSpeedModifier::new(ASTEROID_SPEED_MODIFIER*rng.random_range(1.0..10.0)),
@@ -56,7 +42,7 @@ pub fn spawn_friendly_asteroide(mut commands: Commands, asset_server: Res<AssetS
     sprite.custom_size = Some(Vec2::splat(size));
     let sprite = sprite;
     let _entity = commands.spawn((
-        Asteroid::new(size),
+        Asteroid,
         sprite.clone(),
         Transform::from_translation(Vec3::new(0.0, 300.0, 0.0)),
         LinearSpeedModifier::new(0.0),

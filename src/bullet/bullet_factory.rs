@@ -1,8 +1,10 @@
-use std::time::Duration;
-
 use bevy::prelude::*;
 
-use crate::{ bullet::{bullet_maker_trait::MakeBullet, Bullet}, destruction::{DestroyingHitTimer, MultiHitDestroying}, gun::BulletMakerRequirements, movement::velocity::linear_velocity::Velocity, utillity::timing::SelfDestructTimer, BULLET_SPEED_MODIFIER};
+use crate::BULLET_SPEED_MODIFIER;
+use crate::utillity::timing::SelfDestructTimer;
+use crate::movement::velocity::linear_velocity::Velocity;
+use crate::gun::BulletMakerRequirements;
+use crate::bullet::{bullet_maker_trait::MakeBullet, Bullet};
 
 
 #[derive(Clone)]

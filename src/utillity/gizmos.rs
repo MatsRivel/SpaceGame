@@ -112,6 +112,7 @@ impl Plugin for GizmoPlugins{
     fn build(&self, app: &mut App) {
         app.init_gizmo_group::<MyArrowGizmos>()
             .add_systems(Update, (
+                to_well,
                 draw_player_trajectory::<TRAJECTORY_LENGTH>,
                 draw_arrow,
                 draw_gravity_falloff,

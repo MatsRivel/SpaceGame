@@ -8,6 +8,7 @@ impl Health{
     pub fn new(health:f32)->Self{
         Self { max_health: health, current_health: health }
     }
+    #[allow(unused)]
     pub fn new_injured(max_health:f32,current_health:f32)->Self{
         Self { max_health, current_health }
     }
@@ -17,6 +18,7 @@ impl Health{
     pub fn apply_damage(&mut self, damage: f32){
         self.change_health(-damage);
     }
+    #[allow(unused)]
     pub fn apply_healing(&mut self, healing: f32){
         self.change_health(healing);
     }
