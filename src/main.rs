@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::camera::MyCameraPlugin;
 use crate::entities::gravity_well::GravityWellPlugin;
 use crate::entities::player::PlayerPlugin;
-use crate::movement::linear_movement_2d::LinearMovement2DPlugin;
+use crate::movement::linear_movement_2d::{LinearMovement2DPlugin, ZeroVelocityWhenNoInputPlugin};
 use crate::thrusters::thrusters_plugin::ThrusterPlugin;
 use crate::gun::{gun_plugin::GunPlugin};
 use crate::gravity::{gravity_plugin::GravityPlugin};
@@ -67,6 +67,7 @@ fn main() {
         AsteroidPlugin,
         MyCameraPlugin,
         LinearMovement2DPlugin,
+        ZeroVelocityWhenNoInputPlugin,
         GravityWellPlugin,
         PlayerPlugin,
         DestructionPlugin
