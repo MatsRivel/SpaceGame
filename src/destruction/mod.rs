@@ -15,8 +15,8 @@ pub struct Destroying;
 
 #[derive(Component,Debug,Clone,Copy)]
 #[require(Destroying)]
-pub struct MultiHitDestroying(i32);
-impl MultiHitDestroying{
+pub struct DestroyerHitCount(i32);
+impl DestroyerHitCount{
     pub fn has_more_hits(&self)->bool{
         self.0 > 0
     }
@@ -24,12 +24,12 @@ impl MultiHitDestroying{
         Self(n_hits)
     }
 }
-impl Default for MultiHitDestroying{
+impl Default for DestroyerHitCount{
     fn default() -> Self {
-        Self(2)
+        Self(1)
     }
 }
-impl SubAssign<i32> for MultiHitDestroying{
+impl SubAssign<i32> for DestroyerHitCount{
     fn sub_assign(&mut self, rhs: i32) {
         self.0 -= rhs
     }
@@ -49,7 +49,6 @@ impl DestroyingHitTimer{
 
 #[derive(Event)]
 pub struct DestroySomething;
-
 pub fn destroy_destructible(trigger: Trigger<DestroySomething>, mut commands: Commands) {
     let id = trigger.target();
     if let Ok(mut entity) = commands.get_entity(id) {
@@ -60,7 +59,7 @@ pub fn destroy_destructible(trigger: Trigger<DestroySomething>, mut commands: Co
 pub fn check_for_destruction(
     mut commands: Commands,
     mut defender_query: Query<(Entity, &Transform, &HitBox, Option<&mut Health>), With<Destructible>>,
-    mut attacker_query: Query<(Entity,&Transform, Option<&mut DestroyingHitTimer>, Option<&mut MultiHitDestroying>), With<Destroying>>,
+    mut attacker_query: Query<(Entity,&Transform, Option<&mut DestroyingHitTimer>, Option<&mut DestroyerHitCount>), With<Destroying>>,
 ) {
     for (defending_entity, defending_transform, defending_hitbox, health_option) in defender_query.iter_mut() {
         for (attacking_entity,attacker_transform, attacker_hit_timer, multi_hit_attack) in attacker_query.iter_mut() {

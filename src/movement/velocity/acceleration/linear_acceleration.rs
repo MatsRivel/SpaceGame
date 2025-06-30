@@ -63,7 +63,7 @@ impl AddAssign<LinearAcceleration> for Velocity{
     }
 }
 
-pub fn apply_linear_acceleration(time: Res<Time>, mut query: Query<(&mut Velocity, &mut LinearAcceleration)>){
+pub fn apply_linear_acceleration_to_velocity(time: Res<Time>, mut query: Query<(&mut Velocity, &mut LinearAcceleration)>){
     for (mut vel, mut acc) in query.iter_mut(){
         *acc *= time.delta_secs();
         *vel += *acc;

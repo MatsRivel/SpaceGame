@@ -67,7 +67,6 @@ fn main() {
         AsteroidPlugin,
         MyCameraPlugin,
         LinearMovement2DPlugin,
-        ZeroVelocityWhenNoInputPlugin,
         GravityWellPlugin,
         PlayerPlugin,
         DestructionPlugin

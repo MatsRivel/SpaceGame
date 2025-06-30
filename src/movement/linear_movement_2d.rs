@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use std::ops::Mul;
 
-use crate::{entities::player::PlayerTag, movement::velocity::{acceleration::linear_acceleration::apply_linear_acceleration, angular_velocity::{apply_angular_velocity_to_position, AngularVelocity}, linear_velocity::{apply_linear_velocity_to_position, Velocity}}};
+use crate::{entities::player::{apply_acceleration_to_single_from_keyboard, PlayerTag}, movement::velocity::{acceleration::linear_acceleration::{apply_linear_acceleration_to_velocity}, angular_velocity::{apply_angular_velocity_to_position, AngularVelocity}, linear_velocity::{apply_linear_velocity_to_position, Velocity}}};
 #[derive(Component,Clone, Copy)]
 pub struct LinearSpeedModifier(f32);
 impl LinearSpeedModifier{
@@ -43,25 +43,15 @@ impl Plugin for LinearMovement2DPlugin{
         app.add_systems(FixedUpdate, (
             apply_linear_velocity_to_position, 
             apply_angular_velocity_to_position
-        )).add_systems(Update, apply_linear_acceleration);
+        ))
+        .add_systems(Update, apply_linear_acceleration_to_velocity);
     }
 }
+#[derive(Component,Clone,Debug,Default,Copy)]
 pub struct ZeroVelocityWhenNoInputPlugin;
-impl Plugin for ZeroVelocityWhenNoInputPlugin{
-    fn build(&self, app: &mut App) {
-        app.add_systems(PostUpdate, (
-            set_linear_velocity_to_zero::<PlayerTag>,
-            set_angular_velocity_to_zero::<PlayerTag>
-        ));
-    }
-}
-pub fn set_linear_velocity_to_zero<T:Component>(mut query: Query<&mut Velocity, With<T>>){
-    for mut q in query.iter_mut(){
-        *q = Velocity::new(Vec2::ZERO);
-    }
-}
-pub fn set_angular_velocity_to_zero<T:Component>(mut query: Query<&mut AngularVelocity, With<T>>){
-    for mut q in query.iter_mut(){
-        *q = AngularVelocity::new(0.0);
-    }
-}
+// impl Plugin for ZeroVelocityWhenNoInputPlugin{
+//     fn build(&self, app: &mut App) {
+//         // app.add_systems(Startup, (
+//         // ));
+//     }
+// }

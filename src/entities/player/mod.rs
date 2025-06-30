@@ -1,8 +1,9 @@
 use crate::gravity::gravity_2d::GravityAffected;
 use crate::movement::rotational_movement_2d::RotationalSpeedModifier;
-use crate::movement::linear_movement_2d::LinearSpeedModifier;
-use crate::movement::velocity::angular_velocity::AngularVelocity;
-use crate::movement::velocity::acceleration::linear_acceleration::LinearAcceleration;
+use crate::movement::linear_movement_2d::{LinearSpeedModifier};
+use crate::movement::velocity::angular_velocity::{apply_angular_velocity_to_position, AngularVelocity};
+use crate::movement::velocity::acceleration::linear_acceleration::{LinearAcceleration};
+use crate::movement::velocity::linear_velocity::apply_linear_velocity_to_position;
 use crate::movement::velocity::throttle_velocity::throttle_velocity;
 use crate::thrusters::{HasThrusters, Thrusters};
 use crate::{MAXIMUM_LINEAR_PLAYER_SPEED, PLAYER_BODY_IMAGE_PATH, PLAYER_ROT_SPEED_MODIFIER, PLAYER_SPEED_MODIFIER};
@@ -71,7 +72,7 @@ pub fn apply_acceleration_to_single_from_keyboard<T:Component>(
     *acceleration += delta_time_movement;
 }
 
-pub fn apply_rotation_velocity<T:Component>(
+pub fn apply_acceleration_rotation_velocity<T:Component>(
     time: Res<Time>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
     query: Single<(&mut AngularVelocity, &RotationalSpeedModifier), With<T>>,
@@ -91,11 +92,11 @@ pub fn apply_rotation_velocity<T:Component>(
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin{
     fn build(&self, app: &mut App) {
-                app.add_systems(Startup, 
+        app.add_systems(Startup, 
             spawn_player)
         .add_systems(Update, (
-            apply_rotation_velocity::<PlayerTag>, 
-            apply_acceleration_to_single_from_keyboard::<PlayerTag>, 
+            apply_acceleration_rotation_velocity::<PlayerTag>,
+            apply_acceleration_to_single_from_keyboard::<PlayerTag>,
             throttle_velocity::<PlayerTag,MAXIMUM_LINEAR_PLAYER_SPEED>
         ));
     }
